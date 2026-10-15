@@ -1,0 +1,652 @@
+openapi: 3.1.0
+info:
+  title: HCIF Cognitive API
+  version: 0.1.0
+  description: >
+    API-first, presentation-independent interface to the HCIF cognitive lifecycle (P43, FR-053).
+    All text submitted is treated as untrusted data (P51). Every request requires a principal
+    key; admin-only operations are marked. Binds to localhost by default.
+  license:
+    name: Project license TBD; bundled OEWN data is CC BY 4.0 + Princeton WordNet License
+servers:
+  - url: http://localhost:5080
+security:
+  - principalKey: []
+
+paths:
+  /health:
+    get:
+      summary: Liveness plus active dictionary release
+      security: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, dictionary]
+                properties:
+                  status: { type: string, enum: [Healthy, Degraded] }
+                  dictionary:
+                    oneOf:
+                      - $ref: "#/components/schemas/DictionaryReleaseSummary"
+                      - { type: "null" }
+
+  /conversations:
+    post:
+      summary: Start a conversation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                language: { type: string, default: en }
+                personalityProfile: { type: string }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Conversation" }
+
+  /conversations/{conversationId}/turns:
+    parameters:
+      - $ref: "#/components/parameters/ConversationId"
+    post:
+      summary: Submit an utterance and run the cognitive lifecycle (US1, US3, US4, US5)
+      description: >
+        Runs CognitiveLifecycleAutomaton synchronously up to a terminal turn state. If an action
+        needs confirmation, the turn completes (rootOutcome=Completed) with decision=ProposeAction,
+        and the action stays in ConfirmationRequested (see /actions/{actionId}/confirm).
+        All metadata fields are untrusted data recorded on Data (FR-007, P4, P51) and never affect
+        authorization.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [text]
+              properties:
+                text:
+                  type: string
+                  description: >
+                    No schema length limits. The lifecycle enforces input limits (default 4,000
+                    characters) and returns rootOutcome Rejected with the Data retained (FR-005, P4).
+                    Request bodies over the transport cap (default 64 KB) receive 413 and are not
+                    retained.
+                channel: { type: string, default: api }
+                modality:
+                  type: string
+                  enum: [Text, SpeechTranscript, Api, Message, Document, Event, MachineOutput]
+                  default: Text
+                  description: Input source kind (P4); e.g. a speech-to-text client sends SpeechTranscript
+                sourceIdentity: { type: string, maxLength: 256 }
+                audience: { type: string, maxLength: 256 }
+                declaredLanguageId: { type: string, maxLength: 35, description: BCP 47 tag declared by the source; detection results go on Information }
+                declaredScriptId: { type: string, maxLength: 4, description: ISO 15924 }
+                contextMetadata:
+                  type: object
+                  additionalProperties: true
+                  description: Free-form source context, ≤ 4 KB serialized (larger → rootOutcome Rejected)
+                sourceReliability:
+                  type: string
+                  enum: [Unknown, UserStated, Trusted, Untrusted]
+                  description: Honoured only for Admin/Integration principals; otherwise recorded as Unknown
+                privacy: { $ref: "#/components/schemas/PrivacyClassification" }
+                includeTrace: { type: boolean, default: false }
+      responses:
+        "200":
+          description: Turn processed (including clarification / no-op / partial outcomes)
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/TurnResult" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409":
+          description: Conversation is suspended or another turn is in progress
+        "413":
+          description: Request body exceeds the transport cap (default 64 KB); input not retained
+        "503":
+          description: No published dictionary release (initialize first)
+          content:
+            application/problem+json:
+              schema: { $ref: "#/components/schemas/Problem" }
+
+  /turns/{turnId}/trace:
+    get:
+      summary: Developer/administrator processing trace (FR-055)
+      parameters:
+        - { name: turnId, in: path, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: Trace
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ProcessingTrace" }
+        "403": { description: Not owner or admin }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /turns/{turnId}/resume:
+    post:
+      summary: Resume a Deferred turn from its retained snapshot (FR-005)
+      parameters:
+        - { name: turnId, in: path, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: Turn processed
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/TurnResult" }
+        "409": { description: Turn is not Deferred }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /turns/{turnId}/feedback:
+    parameters:
+      - { name: turnId, in: path, required: true, schema: { type: string } }
+    post:
+      summary: Submit feedback on a turn (P37, FR-043)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/FeedbackRequest" }
+      responses:
+        "201":
+          description: Recorded
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Feedback" }
+        "403": { description: Not the turn owner }
+    get:
+      summary: List feedback on a turn (owner or admin)
+      responses:
+        "200":
+          description: Feedback items
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Feedback" }
+
+  /actions/{actionId}/external-completion:
+    post:
+      summary: "[integration principal] Completion notification for an asynchronous action (P18, P44)"
+      description: >
+        Accepted only for actions in AwaitingExternalCompletion whose externalOperationId matches.
+        The notification is verified against the handler before the state changes.
+      parameters: [{ $ref: "#/components/parameters/ActionId" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [externalOperationId, status]
+              properties:
+                externalOperationId: { type: string }
+                status: { type: string, enum: [Succeeded, Failed] }
+                detail: { type: string }
+      responses:
+        "200":
+          description: Action progressed
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Action" }
+        "409": { description: Not awaiting completion or ID mismatch }
+
+  /actions/{actionId}:
+    get:
+      summary: Action state
+      parameters: [{ $ref: "#/components/parameters/ActionId" }]
+      responses:
+        "200":
+          description: Action
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Action" }
+  /actions/{actionId}/confirm:
+    post:
+      summary: Confirm a pending consequential action (US5-4)
+      parameters: [{ $ref: "#/components/parameters/ActionId" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [confirmationToken]
+              properties:
+                confirmationToken: { type: string }
+      responses:
+        "200":
+          description: Action progressed (Completed, Failed, OutcomeUnknown)
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Action" }
+        "409": { description: Token invalid for the current canonical action, or the action is not awaiting confirmation }
+  /actions/{actionId}/cancel:
+    post:
+      summary: Refuse or cancel a pending action (US5-5)
+      parameters: [{ $ref: "#/components/parameters/ActionId" }]
+      responses:
+        "200":
+          description: Cancelled
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Action" }
+  /actions/{actionId}/audit:
+    get:
+      summary: Append-only audit record (P52)
+      parameters: [{ $ref: "#/components/parameters/ActionId" }]
+      responses:
+        "200":
+          description: Audit
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ActionAudit" }
+
+  /knowledge:
+    get:
+      summary: Query knowledge (excludes erased; retracted/expired only with includeHistory)
+      parameters:
+        - { name: subject, in: query, schema: { type: string } }
+        - { name: predicate, in: query, schema: { type: string } }
+        - { name: includeHistory, in: query, schema: { type: boolean, default: false } }
+      responses:
+        "200":
+          description: Knowledge items
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Knowledge" }
+  /knowledge/{knowledgeId}/explanation:
+    get:
+      summary: Reproducible explanation graph (FR-033)
+      parameters:
+        - { name: knowledgeId, in: path, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: Justification graph
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ExplanationGraph" }
+
+  /memory:
+    get:
+      summary: Inspect the caller's persistent memories (P50)
+      parameters:
+        - { name: category, in: query, schema: { $ref: "#/components/schemas/MemoryCategory" } }
+      responses:
+        "200":
+          description: Memory records
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/MemoryRecord" }
+  /memory/{memoryId}:
+    delete:
+      summary: Erase a memory with cascade over the justification graph (US6-3, FR-058)
+      parameters:
+        - { name: memoryId, in: path, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: Erasure report
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  erased: { type: array, items: { type: string } }
+                  retractedDerived: { type: array, items: { type: string } }
+                  rejustified: { type: array, items: { type: string } }
+
+  /lexicon/lookup:
+    get:
+      summary: Local dictionary lookup (offline; US2-2, SC-003)
+      parameters:
+        - { name: word, in: query, required: true, schema: { type: string } }
+        - { name: pos, in: query, schema: { $ref: "#/components/schemas/LexicalPos" } }
+      responses:
+        "200":
+          description: Morphological analyses + entries + senses
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/LexiconLookupResult" }
+  /lexicon/synsets/{synsetId}:
+    get:
+      summary: Synset with definitions, examples, members
+      parameters:
+        - { name: synsetId, in: path, required: true, schema: { type: string, pattern: "^[0-9]{8}-[nvasr]$" } }
+      responses:
+        "200":
+          description: Synset
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Synset" }
+        "404": { $ref: "#/components/responses/NotFound" }
+  /lexicon/synsets/{synsetId}/relations:
+    get:
+      summary: Bounded relation traversal (P66)
+      parameters:
+        - { name: synsetId, in: path, required: true, schema: { type: string } }
+        - { name: kinds, in: query, schema: { type: array, items: { type: string } }, style: form, explode: false }
+        - { name: maxDepth, in: query, schema: { type: integer, minimum: 1, maximum: 20, default: 1 } }
+      responses:
+        "200":
+          description: Edges reached within limits
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  edges: { type: array, items: { $ref: "#/components/schemas/SemanticRelation" } }
+                  truncated: { type: boolean }
+
+  /admin/dictionary/releases:
+    get:
+      summary: "[admin] List imported releases"
+      responses:
+        "200":
+          description: Releases
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/DictionaryReleaseSummary" }
+    post:
+      summary: "[admin] Acquire + import (long-running; returns a job)"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                archivePath: { type: string, description: Pre-fetched archive; must match the pinned digest }
+                force: { type: boolean, default: false }
+      responses:
+        "202":
+          description: Import job accepted
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ImportJob" }
+  /admin/dictionary/jobs/{jobId}:
+    get:
+      summary: "[admin] Import job status + validation report"
+      parameters:
+        - { name: jobId, in: path, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: Job
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ImportJob" }
+  /admin/dictionary/attribution:
+    get:
+      summary: "[admin] Distribution-ready attribution notice (FR-026)"
+      responses:
+        "200":
+          description: Notice text
+          content:
+            text/plain:
+              schema: { type: string }
+
+  /admin/components:
+    post:
+      summary: "[admin] Register a versioned component; runs contract checks (US7-1)"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ComponentRegistrationRequest" }
+      responses:
+        "201":
+          description: Accepted
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ComponentRegistration" }
+        "422":
+          description: Rejected (contract/compatibility failure)
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ComponentRegistration" }
+
+components:
+  securitySchemes:
+    principalKey:
+      type: apiKey
+      in: header
+      name: X-Hcif-Principal-Key
+  parameters:
+    ConversationId: { name: conversationId, in: path, required: true, schema: { type: string } }
+    ActionId: { name: actionId, in: path, required: true, schema: { type: string } }
+  responses:
+    NotFound:
+      description: Not found
+      content:
+        application/problem+json:
+          schema: { $ref: "#/components/schemas/Problem" }
+
+  schemas:
+    Problem:
+      type: object
+      properties:
+        type: { type: string }
+        title: { type: string }
+        status: { type: integer }
+        detail: { type: string }
+    PrivacyClassification: { type: string, enum: [Public, Personal, Sensitive, Restricted], default: Personal }
+    MemoryCategory: { type: string, enum: [Working, Conversational, SemanticKnowledge, Episodic, Procedural] }
+    LexicalPos: { type: string, enum: [Noun, Verb, Adjective, AdjectiveSatellite, Adverb] }
+    EpistemicStatus:
+      type: string
+      enum: [UserAsserted, ExternallyAsserted, Verified, LogicallyDerived, ProbabilisticallyInferred,
+             Hypothesized, Disputed, Contradicted, Retracted, Unknown]
+    Diagnostic:
+      type: object
+      required: [code, severity, message]
+      properties:
+        code: { type: string, examples: [UNKNOWN_LEXEME, PARTIAL_PARSE, AMBIGUOUS_SENSE, UNRESOLVED_REFERENCE, BUDGET_EXCEEDED] }
+        severity: { type: string, enum: [Info, Warning, Error] }
+        span: { type: array, items: { type: integer }, minItems: 2, maxItems: 2 }
+        message: { type: string }
+    Conversation:
+      type: object
+      required: [conversationId, createdAt, language]
+      properties:
+        conversationId: { type: string }
+        createdAt: { type: string, format: date-time }
+        language: { type: string }
+    TurnResult:
+      type: object
+      required: [turnId, dataId, rootOutcome, reply]
+      properties:
+        turnId: { type: string }
+        dataId: { type: string }
+        informationId: { type: [string, "null"] }
+        intelligenceId: { type: [string, "null"] }
+        rootOutcome:
+          type: string
+          enum: [Completed, Clarification, Deferred, Rejected, Failed, Cancelled]
+        decision:
+          type: string
+          enum: [Answer, Acknowledge, Ask, Recommend, Clarify, Abstain, NoOp, ProposeAction, ExecuteAction]
+        reply:
+          type: object
+          required: [text]
+          properties:
+            text: { type: string }
+            groundedOn: { type: array, items: { type: string }, description: Knowledge IDs }
+            hedged: { type: boolean }
+        knowledgeCreated: { type: array, items: { $ref: "#/components/schemas/Knowledge" } }
+        pendingActions: { type: array, items: { $ref: "#/components/schemas/Action" } }
+        diagnostics: { type: array, items: { $ref: "#/components/schemas/Diagnostic" } }
+        trace: { $ref: "#/components/schemas/ProcessingTrace" }
+    Knowledge:
+      type: object
+      required: [knowledgeId, proposition, epistemicStatus, dependsOnUnverified]
+      properties:
+        knowledgeId: { type: string }
+        proposition:
+          type: object
+          properties:
+            predicate: { type: string, examples: [PlaysInstrument] }
+            arguments: { type: array, items: { type: object } }
+            polarity: { type: string, enum: [Affirmative, Negative] }
+            certainty: { type: string, enum: [Categorical, Probable, Possible, Hypothetical, Counterfactual, Unknown] }
+            scope: { type: string, enum: [Asserted, Quoted, Conditional, Hypothetical, Counterfactual, Questioned, NonLiteral] }
+            surfaceVoice: { type: string, enum: [Active, Passive] }
+        epistemicStatus: { $ref: "#/components/schemas/EpistemicStatus" }
+        dependsOnUnverified: { type: boolean }
+        confidence: { type: [number, "null"], description: Null unless calibrated (FR-034) }
+        sourceAttribution: { type: object }
+        inferenceRuleIds: { type: array, items: { type: string } }
+        contradictionStatus: { type: string }
+        supersededBy: { type: [string, "null"] }
+    ExplanationGraph:
+      type: object
+      properties:
+        nodes: { type: array, items: { type: object, properties: { id: { type: string }, kind: { type: string, enum: [Data, Information, Knowledge, Rule, LexicalRelation] }, label: { type: string } } } }
+        edges: { type: array, items: { type: object, properties: { from: { type: string }, to: { type: string }, label: { type: string } } } }
+    Action:
+      type: object
+      required: [actionId, type, state, isExternalSideEffect]
+      properties:
+        actionId: { type: string }
+        type: { type: string }
+        state:
+          type: string
+          enum: [CandidateIdentified, PreconditionsEvaluated, PolicyEvaluated, AuthorizationChecked,
+                 ConfirmationRequested, Ready, Executing, AwaitingExternalCompletion, RetryScheduled,
+                 Completed, Failed, CompensationOrRecovery, Blocked, Cancelled, OutcomeUnknown, AuditRecorded]
+        attempts: { type: integer, minimum: 0 }
+        nextAttemptAt: { type: [string, "null"], format: date-time }
+        externalOperationId: { type: [string, "null"] }
+        completionDeadline: { type: [string, "null"], format: date-time }
+        isExternalSideEffect: { type: boolean }
+        destination: { type: [string, "null"] }
+        parametersRedacted: { type: object }
+        confirmationToken: { type: [string, "null"], description: Present only while ConfirmationRequested }
+        blockedReason: { type: [string, "null"] }
+        result: { type: [object, "null"] }
+    ActionAudit:
+      type: object
+      properties:
+        auditId: { type: string }
+        actionId: { type: string }
+        initiatingIntent: { type: string }
+        supportingKnowledgeIds: { type: array, items: { type: string } }
+        authorizationResult: { type: string }
+        stateTrail: { type: array, items: { type: object, properties: { state: { type: string }, at: { type: string, format: date-time } } } }
+        finalStatus: { type: string }
+        externalOperationId: { type: [string, "null"] }
+        error: { type: [string, "null"] }
+    FeedbackRequest:
+      type: object
+      required: [category, rating]
+      properties:
+        category: { type: string, enum: [ParseAccuracy, InferenceCorrectness, DecisionRelevance, UserAcceptance] }
+        targetRef: { type: [string, "null"], description: informationId / knowledgeId / intelligenceId }
+        rating: { type: string, enum: [Positive, Negative, Neutral] }
+        comment: { type: string, maxLength: 2000 }
+    Feedback:
+      type: object
+      properties:
+        feedbackId: { type: string }
+        turnId: { type: string }
+        category:
+          type: string
+          enum: [ParseAccuracy, InferenceCorrectness, DecisionRelevance, UserAcceptance, ActionOutcome, ExecutionFailure, Correction]
+        targetRef: { type: [string, "null"] }
+        rating: { type: string, enum: [Positive, Negative, Neutral] }
+        source: { type: string, enum: [User, System] }
+        createdAt: { type: string, format: date-time }
+    MemoryRecord:
+      type: object
+      properties:
+        memoryId: { type: string }
+        category: { $ref: "#/components/schemas/MemoryCategory" }
+        contentRef: { type: string }
+        privacy: { $ref: "#/components/schemas/PrivacyClassification" }
+        createdAt: { type: string, format: date-time }
+        expiresAt: { type: [string, "null"], format: date-time }
+    ProcessingTrace:
+      type: object
+      description: See data-model.md §6. Protected parameters redacted.
+      properties:
+        traceId: { type: string }
+        dictionaryRelease: { type: object, properties: { releaseId: { type: string }, importId: { type: string } } }
+        stages: { type: array, items: { type: object } }
+        transitions: { type: array, items: { type: object } }
+        tokens: { type: array, items: { type: object } }
+        ruleFirings: { type: array, items: { type: object } }
+        actionOutcomes: { type: array, items: { type: object } }
+    LexiconLookupResult:
+      type: object
+      properties:
+        query: { type: string }
+        morphology: { type: array, items: { type: object, properties: { lemma: { type: string }, pos: { type: string }, features: { type: object } } } }
+        entries:
+          type: array
+          items:
+            type: object
+            properties:
+              lemma: { type: string }
+              pos: { $ref: "#/components/schemas/LexicalPos" }
+              homographIndex: { type: [integer, "null"] }
+              senses:
+                type: array
+                items: { type: object, properties: { senseKey: { type: string }, synsetId: { type: string }, definition: { type: string } } }
+        releaseId: { type: string }
+    Synset:
+      type: object
+      properties:
+        synsetId: { type: string }
+        pos: { $ref: "#/components/schemas/LexicalPos" }
+        lexFile: { type: string }
+        definitions: { type: array, items: { type: string } }
+        examples: { type: array, items: { type: string } }
+        members: { type: array, items: { type: string } }
+        ili: { type: [string, "null"] }
+    SemanticRelation:
+      type: object
+      properties:
+        kind: { type: string }
+        sourceId: { type: string }
+        targetId: { type: string }
+        derivedInverse: { type: boolean }
+        depth: { type: integer }
+    DictionaryReleaseSummary:
+      type: object
+      properties:
+        releaseId: { type: string }
+        importId: { type: string }
+        archiveSha256: { type: string }
+        status: { type: string }
+        active: { type: boolean }
+        counts: { type: object }
+        importedAt: { type: string, format: date-time }
+    ImportJob:
+      type: object
+      properties:
+        jobId: { type: string }
+        state: { type: string }
+        report: { type: object }
+    ComponentRegistrationRequest:
+      type: object
+      required: [kind, componentId, version, package]
+      properties:
+        kind: { type: string, enum: [Parser, Grammar, LanguagePack, InferenceRule, ActionHandler, DictionaryProvider, DecisionPolicy] }
+        componentId: { type: string }
+        version: { type: string }
+        package: { type: string, description: Path to assembly / rule file / pack directory }
+    ComponentRegistration:
+      type: object
+      properties:
+        componentId: { type: string }
+        version: { type: string }
+        compatibilityResult: { type: string, enum: [Accepted, Rejected] }
+        reasons: { type: array, items: { type: string } }

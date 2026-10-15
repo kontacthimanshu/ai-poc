@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hcif.local/schemas/automaton-definition/1.0.0",
+  "title": "HCIF AutomatonDefinition",
+  "description": "Standard automaton contract (P2, P25, FR-002). Guards and actions are referenced by registered ID and evaluated externally; they cannot alter the state set (P2).",
+  "type": "object",
+  "required": ["automatonId", "version", "inputType", "outputType", "states", "transitions", "limits", "cancellable", "errorSemantics"],
+  "additionalProperties": false,
+  "properties": {
+    "automatonId": { "type": "string", "pattern": "^[A-Z][A-Za-z0-9]*Automaton$" },
+    "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "description": { "type": "string" },
+    "inputType": { "type": "string", "description": "Fully-qualified contract type name" },
+    "outputType": { "type": "string" },
+    "events": {
+      "type": "object",
+      "properties": {
+        "inputs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "outputs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      }
+    },
+    "states": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["name", "kind"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string", "pattern": "^[A-Z][A-Za-z0-9]*$" },
+          "kind": { "enum": ["Initial", "Normal", "TerminalAccepting", "TerminalFailure", "TerminalCancelled"] },
+          "entryOps": { "type": "array", "items": { "type": "string" } },
+          "exitOps": { "type": "array", "items": { "type": "string" } },
+          "invokes": {
+            "type": "object",
+            "required": ["automatonId", "versionRange"],
+            "properties": {
+              "automatonId": { "type": "string" },
+              "versionRange": { "type": "string", "examples": ["^1.0.0"] },
+              "outcomeEvents": {
+                "type": "object",
+                "description": "Maps child outcomes to parent events",
+                "propertyNames": { "enum": ["Succeeded", "Failed", "Cancelled", "Clarify", "Deferred", "BudgetExceeded"] },
+                "additionalProperties": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "transitions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["from", "event", "to"],
+        "additionalProperties": false,
+        "properties": {
+          "from": { "type": "string" },
+          "event": { "type": "string" },
+          "guard": { "type": "string", "description": "Registered guard ID" },
+          "to": { "type": "string" },
+          "actions": { "type": "array", "items": { "type": "string" } },
+          "kind": { "enum": ["Normal", "Failure", "Recovery", "Clarification", "Cancellation", "Deferral"], "default": "Normal" }
+        }
+      }
+    },
+    "errorSemantics": {
+      "type": "object",
+      "required": ["onUnhandledEvent", "onGuardException"],
+      "properties": {
+        "onUnhandledEvent": { "enum": ["Reject", "Fail"] },
+        "onGuardException": { "enum": ["TreatAsFalse", "Fail"] },
+        "diagnosticCodes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "limits": {
+      "type": "object",
+      "required": ["maxDepth", "maxTransitions", "timeoutMs"],
+      "properties": {
+        "maxDepth": { "type": "integer", "minimum": 1, "maximum": 64 },
+        "maxTransitions": { "type": "integer", "minimum": 1 },
+        "timeoutMs": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "cancellable": { "type": "boolean" },
+    "persistence": {
+      "type": "object",
+      "properties": {
+        "suspendable": { "type": "boolean" },
+        "snapshotSchemaVersion": { "type": "string" }
+      }
+    }
+  },
+  "$comment": "Structural rules validated in code (not expressible here): exactly one Initial state; >=1 Terminal state; all states reachable from Initial; every non-terminal state has a Failure-kind path; transition endpoints, guards, actions and invoked automata resolve in the registry."
+}

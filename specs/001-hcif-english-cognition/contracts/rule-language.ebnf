@@ -1,0 +1,110 @@
+(* HCIF Rule Language (HRL) v1.0 — extends the constitution P27 baseline grammar with
+   variable binding, negation, quantification, temporal constraints, rule scopes, versioning and
+   inference provenance (P27 "SHALL be extended"). Files: *.hrl. Comments: "//" to end of line. *)
+
+RuleFile         = { Rule } ;
+
+Rule             = "RULE", Identifier,
+                   [ "VERSION", SemVer ],
+                   [ "SCOPE", Scope ],
+                   "WHEN", Conditions,
+                   "THEN", Consequences,
+                   [ "PRIORITY", Integer ],
+                   [ "CONFLICT", ConflictStrategy ],
+                   "END" ;
+
+Scope            = "STAGE", ( "Knowledge" | "Intelligence" ), [ "DOMAIN", Identifier ] ;
+ConflictStrategy = "PRIORITY" | "SPECIFICITY" | "RECENCY" ;
+
+Conditions       = Condition, { LogicalOperator, Condition } ;
+LogicalOperator  = "AND" | "OR" ;
+
+Condition        = [ "NOT" ], Atom
+                 | "(", Conditions, ")"
+                 | Quantified ;
+
+Quantified       = ( "EXISTS" | "FORALL" ), Variable, "IN", CollectionExpr, ":", "(", Conditions, ")" ;
+
+Atom             = FactPattern
+                 | RelationPattern
+                 | ContextPattern
+                 | TemporalPattern
+                 | PredicateInvocation ;
+
+(* Patterns match Knowledge items; optional status filter restricts epistemic class. *)
+FactPattern      = Term, Predicate, Term, [ StatusFilter ] ;
+RelationPattern  = Term, Relation, Term, [ StatusFilter ] ;
+StatusFilter     = "[", "STATUS", "IN", "{", EpistemicClass, { ",", EpistemicClass }, "}", "]" ;
+
+ContextPattern   = "CONTEXT", ".", ContextKey, Operator, Value ;
+TemporalPattern  = "VALID", "AT", TimeExpr
+                 | TimeExpr, ( "BEFORE" | "AFTER" | "DURING" ), TimeExpr ;
+
+(* Built-ins include: WordNet.IsA(?term, "03806455-n"), WordNet.Related(?a, ?b, kind, maxDepth),
+   Lexicon.Lemma(?token, ?lemma), Entity.Type(?e, ?t). All are budget-bounded (P66). *)
+PredicateInvocation
+                 = QualifiedId, "(", [ Arguments ], ")" ;
+
+Consequences     = Consequence, { ",", Consequence } ;
+
+Consequence      = AssertFact
+                 | InferHypothesis
+                 | RecommendAction
+                 | RequestClarification
+                 | EmitEvent ;
+
+AssertFact       = "ASSERT", Proposition, Provenance ;
+InferHypothesis  = "INFER", Proposition, Provenance ;
+RecommendAction  = "RECOMMEND", ActionExpression ;
+RequestClarification
+                 = "CLARIFY", QuestionExpression ;
+EmitEvent        = "EMIT", EventExpression ;
+
+(* Provenance is mandatory on knowledge-producing consequences (FR-033). *)
+Provenance       = "EPISTEMIC", EpistemicClass,
+                   "EVIDENCE", EvidenceKind,
+                   [ "CERTAINTY", CertaintyValue ] ;
+
+EpistemicClass   = "LogicallyDerived" | "Hypothesized" | "ProbabilisticallyInferred" ;
+                   (* rules may NOT emit UserAsserted, ExternallyAsserted or Verified *)
+EvidenceKind     = "Taxonomic" | "Entailment" | "HeuristicAssociation" | "Hypothesis" ;
+CertaintyValue   = "Categorical" | "Probable" | "Possible" | "Hypothetical" ;
+
+Proposition      = Predicate, "(", Term, { ",", Term }, ")" ;
+ActionExpression = ActionType, "(", [ NamedArgs ], ")" ;
+QuestionExpression
+                 = StringLiteral | TemplateRef ;
+EventExpression  = Identifier, "(", [ NamedArgs ], ")" ;
+
+Term             = Variable | Identifier | StringLiteral | SynsetLiteral ;
+Variable         = "?", Identifier ;
+SynsetLiteral    = "@", Digit8, "-", ( "n" | "v" | "a" | "s" | "r" ) ;
+Arguments        = Term, { ",", Term } ;
+NamedArgs        = Identifier, "=", Term, { ",", Identifier, "=", Term } ;
+CollectionExpr   = QualifiedId, "(", [ Arguments ], ")" ;
+Operator         = "=" | "!=" | "<" | "<=" | ">" | ">=" | "IN" ;
+TimeExpr         = "NOW" | Variable | StringLiteral ;
+Predicate        = Identifier ;
+Relation         = Identifier ;
+ActionType       = Identifier ;
+ContextKey       = Identifier, { ".", Identifier } ;
+TemplateRef      = "$", Identifier ;
+QualifiedId      = Identifier, { ".", Identifier } ;
+Value            = Term | Integer ;
+SemVer           = Integer, ".", Integer, ".", Integer ;
+
+(* ---- Normative baseline example (must load and pass its tests) ----
+
+RULE InstrumentGeneralization VERSION 1.0.0 SCOPE STAGE Knowledge DOMAIN music
+WHEN  ?p PlaysInstrument ?i [STATUS IN {UserAsserted, LogicallyDerived}]
+  AND WordNet.IsA(?i, @03806455-n)
+THEN  ASSERT PlaysMusicalInstrument(?p) EPISTEMIC LogicallyDerived EVIDENCE Taxonomic
+PRIORITY 50
+END
+
+RULE PossibleSkill VERSION 1.0.0 SCOPE STAGE Knowledge DOMAIN music
+WHEN  ?p PlaysInstrument ?i [STATUS IN {UserAsserted}]
+THEN  INFER PossiblyHasSkill(?p, ?i) EPISTEMIC Hypothesized EVIDENCE Hypothesis CERTAINTY Possible
+PRIORITY 10
+END
+---- *)

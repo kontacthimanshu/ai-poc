@@ -1,36 +1,95 @@
-# Constitution: Hierarchical Finite Automata-Based Artificial Intelligence and Action Framework
+<!--
+SYNC IMPACT REPORT
+==================
+Version change: 1.1.0 → 1.1.1 (PATCH — structural reformat to the GitHub Spec Kit constitution
+layout; no principle added, removed, or semantically redefined)
 
-**Project Name:** Hierarchical Cognitive Intelligence Framework (HCIF)  
-**Constitution Version:** 1.0.0  
-**Ratification Date:** 2026-10-15  
-**Last Amended:** 2026-10-15  
+Note on prior version: the source document's header declared 1.0.0, while its appended English /
+WordNet amendment (Principles 56–70) declared the resulting version to be 1.1.0. 1.1.0 is treated
+as the effective prior version.
+
+Modified principles:
+  - All 70 principles retained with their original numbers (P1–P70) and normative text.
+  - P39 title normalised: "Cognitive Processing SHALL Support Pluggable Engines"
+    → "Cognitive Processing Shall Support Pluggable Engines" (capitalisation only).
+  - P54 consolidated: the amended 18-step development sequence (former amendment section VIII)
+    is now the authoritative sequence in "Development Workflow & Implementation Sequence";
+    the superseded v1.0.0 10-step sequence is retained there for traceability.
+  - Lower-case "SHALL not" normalised to "SHALL NOT" (P4, P28, P50, P55); no semantic change.
+
+Added sections (structural only):
+  - "Mission and Purpose" (former section I + former "Constitutional Objective")
+  - Grouping headings (### I–XXIV) inside "Core Principles"
+  - "Reference Cognitive Processing Scenario & Acceptance Baseline" (Spec Kit SECTION_2)
+  - "Development Workflow & Implementation Sequence" (Spec Kit SECTION_3), incl.
+    "Constitution Check Gates" derived from P53, P55 and Governance → Compliance
+
+Removed sections: none. Relocated:
+  - Former amendment sections "VIII. Amendment to the Development Sequence" → SECTION_3
+  - Former amendment section "IX. Constitutional Compatibility" → Governance
+  - Duplicate amendment roman numerals (II–IX) replaced by continuous grouping I–XXIV
+
+Templates requiring updates:
+  - ✅ .specify/templates/plan-template.md — "Constitution Check" reads gates from this file at
+       runtime; the new "Constitution Check Gates" subsection supplies them. No edit required.
+  - ✅ .specify/templates/spec-template.md — no change required; specs MUST cite principles by
+       number (P1–P70) per Governance → Compliance.
+  - ✅ .specify/templates/tasks-template.md — no change required.
+
+Follow-up TODOs: none. No placeholders deferred.
+-->
+
+# Hierarchical Cognitive Intelligence Framework (HCIF) Constitution
+
+**Full title:** Constitution: Hierarchical Finite Automata-Based Artificial Intelligence and
+Action Framework
 **Status:** Foundational Constitution
 
----
+## Mission and Purpose
 
-## I. Mission and Purpose
-
-The Hierarchical Cognitive Intelligence Framework (HCIF) SHALL implement an artificially intelligent conversational and action-taking system based on the following cognitive processing lifecycle:
+The Hierarchical Cognitive Intelligence Framework (HCIF) SHALL implement an artificially
+intelligent conversational and action-taking system based on the following cognitive processing
+lifecycle:
 
 **Data → Information → Knowledge → Intelligence → Action**
 
-The framework SHALL accept natural-language inputs, comprehend their grammatical and semantic composition, derive contextual knowledge, perform intelligent reasoning, and execute appropriate actions.
+- The framework SHALL accept natural-language inputs, comprehend their grammatical and semantic
+  composition, derive contextual knowledge, perform intelligent reasoning, and execute
+  appropriate actions.
+- The system SHALL use hierarchical finite automata as its primary execution and orchestration
+  mechanism.
+- Each cognitive processing stage SHALL be implemented as one or more finite-state machines
+  capable of activating subordinate finite-state machines, deterministic algorithms, domain
+  rules, knowledge-retrieval procedures, and external computational services.
+- The system SHALL support natural-language conversation, contextual learning, knowledge
+  accumulation, decision-making, and interactions with external applications and physical
+  devices.
+- The framework SHALL remain extensible across languages, domains, operating environments, and
+  communication channels.
+- The framework SHALL NOT depend exclusively on a large language model for its cognitive
+  processing.
 
-The system SHALL use hierarchical finite automata as its primary execution and orchestration mechanism.
+### Constitutional Objective
 
-Each cognitive processing stage SHALL be implemented as one or more finite-state machines capable of activating subordinate finite-state machines, deterministic algorithms, domain rules, knowledge-retrieval procedures, and external computational services.
+The ultimate objective of HCIF is to construct an extensible artificial intelligence framework in
+which natural-language communication is systematically transformed into structured information,
+evidence-grounded knowledge, contextual intelligence, and authorized actions.
 
-The system SHALL support natural-language conversation, contextual learning, knowledge accumulation, decision-making, and interactions with external applications and physical devices.
+Hierarchical finite automata SHALL provide the execution discipline, grammatical systems SHALL
+provide linguistic comprehension, knowledge engines SHALL provide inference, and decision engines
+SHALL provide context-sensitive behavior.
 
-The framework SHALL remain extensible across languages, domains, operating environments, and communication channels.
+The architecture SHALL make every processing stage independently understandable, testable,
+replaceable, and extensible across languages and application domains.
 
-The framework SHALL NOT depend exclusively on a large language model for its cognitive processing.
+## Core Principles
 
----
+Principles are numbered P1–P70. Numbers are stable identifiers and MUST be used when feature
+specifications, plans, and tasks reference this constitution.
 
-## II. Foundational Architectural Principles
+### I. Foundational Cognitive Architecture (P1–P3)
 
-### Principle 1: The Cognitive Lifecycle Is Mandatory
+#### P1. The Cognitive Lifecycle Is Mandatory
 
 Every natural-language input SHALL enter a formally defined cognitive processing pipeline.
 
@@ -44,21 +103,20 @@ The primary lifecycle SHALL consist of the following stages:
 6. Action execution
 7. Feedback assimilation
 
-The framework SHALL permit transitions between stages according to formally specified conditions.
+- The framework SHALL permit transitions between stages according to formally specified
+  conditions.
+- Processing SHALL NOT assume that every input necessarily produces new knowledge, a decision, or
+  an external action.
+- An input MAY be rejected, deferred, clarified, or retained without advancing to the next
+  cognitive stage.
+- Feedback from subsequent processing SHALL be permitted to update prior interpretations.
 
-Processing SHALL NOT assume that every input necessarily produces new knowledge, a decision, or an external action.
+#### P2. Hierarchical Finite Automata Shall Govern Execution
 
-An input MAY be rejected, deferred, clarified, or retained without advancing to the next cognitive stage.
-
-Feedback from subsequent processing SHALL be permitted to update prior interpretations.
-
-### Principle 2: Hierarchical Finite Automata Shall Govern Execution
-
-Each primary cognitive stage SHALL be implemented using a finite-state automaton.
-
-A parent automaton SHALL be permitted to activate subordinate automata.
-
-Subordinate automata MAY activate additional automata recursively, subject to configured execution-depth and resource limits.
+- Each primary cognitive stage SHALL be implemented using a finite-state automaton.
+- A parent automaton SHALL be permitted to activate subordinate automata.
+- Subordinate automata MAY activate additional automata recursively, subject to configured
+  execution-depth and resource limits.
 
 An automaton SHALL contain:
 
@@ -71,17 +129,18 @@ An automaton SHALL contain:
 - Entry and exit operations
 - Defined failure and recovery transitions
 
-The finite-state control model SHALL remain independent of the potentially unbounded data held in semantic objects, knowledge repositories, and runtime execution contexts.
+- The finite-state control model SHALL remain independent of the potentially unbounded data held
+  in semantic objects, knowledge repositories, and runtime execution contexts.
+- Hierarchical composition SHALL follow explicitly documented statechart or
+  hierarchical-state-machine semantics.
+- Conditions evaluated through dynamically compiled code SHALL operate as externally evaluated
+  guards or actions rather than silently redefining the formal states of the underlying
+  automaton.
 
-Hierarchical composition SHALL follow explicitly documented statechart or hierarchical-state-machine semantics.
+#### P3. Cognitive States and Cognitive Objects Shall Be Separate
 
-Conditions evaluated through dynamically compiled code SHALL operate as externally evaluated guards or actions rather than silently redefining the formal states of the underlying automaton.
-
-### Principle 3: Cognitive States and Cognitive Objects Shall Be Separate
-
-Finite automata SHALL control the execution lifecycle.
-
-Typed objects SHALL contain the results of cognitive processing.
+- Finite automata SHALL control the execution lifecycle.
+- Typed objects SHALL contain the results of cognitive processing.
 
 The framework SHALL represent each level using distinct models:
 
@@ -91,21 +150,17 @@ The framework SHALL represent each level using distinct models:
 - `Intelligence`
 - `Action`
 
-Objects at successive levels SHALL reference their originating objects.
+- Objects at successive levels SHALL reference their originating objects.
+- The system SHALL preserve traceability across all transformations.
+- An intelligence object SHALL be traceable to its supporting knowledge, information, and
+  original data.
 
-The system SHALL preserve traceability across all transformations.
+### II. Data Acquisition and Representation (P4)
 
-An intelligence object SHALL be traceable to its supporting knowledge, information, and original data.
+#### P4. Natural-Language Data Shall Be Preserved
 
----
-
-## III. Data Acquisition and Representation
-
-### Principle 4: Natural-Language Data Shall Be Preserved
-
-The system SHALL treat an incoming sentence or utterance as an input data object.
-
-The original input SHALL be preserved without semantic modification.
+- The system SHALL treat an incoming sentence or utterance as an input data object.
+- The original input SHALL be preserved without semantic modification.
 
 A data object SHALL contain, where available:
 
@@ -135,17 +190,17 @@ The system SHALL support inputs from:
 - Event notifications
 - Machine-generated textual output
 
-The data acquisition stage SHALL not automatically consider user-supplied assertions to be verified facts.
+The data acquisition stage SHALL NOT automatically consider user-supplied assertions to be
+verified facts.
 
----
+### III. Information Construction (P5–P7)
 
-## IV. Information Construction
+#### P5. Grammar-Driven Comprehension Is Mandatory
 
-### Principle 5: Grammar-Driven Comprehension Is Mandatory
-
-The framework SHALL transform natural-language data into structured information through grammatical and semantic analysis.
-
-Language comprehension SHALL operate through language-specific grammar definitions and reusable language-neutral processing stages.
+- The framework SHALL transform natural-language data into structured information through
+  grammatical and semantic analysis.
+- Language comprehension SHALL operate through language-specific grammar definitions and reusable
+  language-neutral processing stages.
 
 The information extraction pipeline SHALL support:
 
@@ -166,11 +221,12 @@ The information extraction pipeline SHALL support:
 15. Semantic interpretation
 16. Canonical information-object generation
 
-Each operation SHALL be implemented as a subordinate automaton or a computational service activated by an automaton.
+- Each operation SHALL be implemented as a subordinate automaton or a computational service
+  activated by an automaton.
+- A failed or ambiguous parsing operation SHALL generate explicit diagnostics rather than
+  silently manufacturing a unique interpretation.
 
-A failed or ambiguous parsing operation SHALL generate explicit diagnostics rather than silently manufacturing a unique interpretation.
-
-### Principle 6: Information Shall Be Represented as Typed Semantic Objects
+#### P6. Information Shall Be Represented as Typed Semantic Objects
 
 The framework SHALL produce detailed, strongly typed information objects.
 
@@ -208,11 +264,11 @@ Each information object SHALL represent, where applicable:
 - Certainty and ambiguity metadata
 - Original token offsets
 
-The distinction between grammatical gender and a person's actual gender SHALL be preserved.
+- The distinction between grammatical gender and a person's actual gender SHALL be preserved.
+- A gender value SHALL NOT be inferred solely from a person's name unless an explicitly
+  identified source or user-provided context supports the inference.
 
-A gender value SHALL NOT be inferred solely from a person's name unless an explicitly identified source or user-provided context supports the inference.
-
-### Principle 7: Information Objects Shall Support Arbitrary Linguistic Complexity
+#### P7. Information Objects Shall Support Arbitrary Linguistic Complexity
 
 The information model SHALL support:
 
@@ -233,13 +289,12 @@ The information model SHALL support:
 - Ambiguous statements
 - Multi-sentence discourse
 
-Information objects SHALL use compositional structures rather than relying on a fixed number of grammatical fields.
+Information objects SHALL use compositional structures rather than relying on a fixed number of
+grammatical fields.
 
----
+### IV. Natural-Language Grammar Framework (P8–P10)
 
-## V. Natural-Language Grammar Framework
-
-### Principle 8: Grammars Shall Be Declarative and Extensible
+#### P8. Grammars Shall Be Declarative and Extensible
 
 The framework SHALL define language grammars independently from the cognitive execution engine.
 
@@ -258,17 +313,16 @@ A grammar module SHALL contain:
 - Ambiguity-resolution strategies
 - Language-specific exceptions
 
-The system SHALL initially support English.
+- The system SHALL initially support English (see P56).
+- The framework SHALL provide extension points for Hindi and other languages without modifying
+  the cognitive automata.
+- The architecture SHALL accommodate languages with substantially different word orders,
+  inflection patterns, grammatical cases, and writing systems.
 
-The framework SHALL provide extension points for Hindi and other languages without modifying the cognitive automata.
+#### P9. English Grammar Shall Support a Formal Baseline
 
-The architecture SHALL accommodate languages with substantially different word orders, inflection patterns, grammatical cases, and writing systems.
-
-### Principle 9: English Grammar Shall Support a Formal Baseline
-
-The English grammar module SHALL implement a formal foundational grammar.
-
-The initial grammar MAY use a context-free or extended context-free representation.
+- The English grammar module SHALL implement a formal foundational grammar.
+- The initial grammar MAY use a context-free or extended context-free representation.
 
 An illustrative grammar is:
 
@@ -331,37 +385,34 @@ Determiner       = LexicalDeterminer ;
 Preposition      = LexicalPreposition ;
 ```
 
-This grammar SHALL serve only as a foundational example.
+- This grammar SHALL serve only as a foundational example.
+- The production implementation SHALL support recursion, agreement, ambiguity, language-specific
+  exceptions, and constructions not captured by the baseline.
+- Grammatical recognition SHALL be followed by semantic interpretation rather than being treated
+  as sufficient for comprehension.
 
-The production implementation SHALL support recursion, agreement, ambiguity, language-specific exceptions, and constructions not captured by the baseline.
+#### P10. Parsing Shall Produce a Canonical Semantic Representation
 
-Grammatical recognition SHALL be followed by semantic interpretation rather than being treated as sufficient for comprehension.
-
-### Principle 10: Parsing Shall Produce a Canonical Semantic Representation
-
-Different linguistic expressions conveying equivalent meanings SHOULD map to compatible canonical representations.
-
-For example:
+Different linguistic expressions conveying equivalent meanings SHOULD map to compatible canonical
+representations. For example:
 
 - "Seeta plays guitar."
 - "Seeta plays the guitar."
 - "The guitar is played by Seeta."
 
-These expressions SHOULD yield a compatible primary semantic proposition, subject to their linguistic context.
+These expressions SHOULD yield a compatible primary semantic proposition, subject to their
+linguistic context.
 
-The system SHALL preserve meaningful differences in tense, emphasis, scope, negation, modality, and certainty.
+- The system SHALL preserve meaningful differences in tense, emphasis, scope, negation, modality,
+  and certainty.
+- Canonical semantic representations SHALL be language-neutral wherever practical.
 
-Canonical semantic representations SHALL be language-neutral wherever practical.
+### V. Knowledge Construction (P11–P14)
 
----
+#### P11. Information Shall Be Transformed Into Explicit and Inferred Knowledge
 
-## VI. Knowledge Construction
-
-### Principle 11: Information Shall Be Transformed Into Explicit and Inferred Knowledge
-
-The knowledge-processing stage SHALL accept one or more information objects.
-
-It SHALL construct knowledge using:
+The knowledge-processing stage SHALL accept one or more information objects. It SHALL construct
+knowledge using:
 
 - Explicit assertion extraction
 - Existing knowledge retrieval
@@ -377,15 +428,13 @@ It SHALL construct knowledge using:
 - Contradiction detection
 - Evidence reconciliation
 
-Knowledge SHALL be represented as structured objects capable of supporting future reasoning.
+- Knowledge SHALL be represented as structured objects capable of supporting future reasoning.
+- The framework SHALL distinguish direct assertions from derived conclusions.
 
-The framework SHALL distinguish direct assertions from derived conclusions.
+#### P12. Knowledge Shall Preserve Epistemic Status
 
-### Principle 12: Knowledge Shall Preserve Epistemic Status
-
-Every knowledge object SHALL include an epistemic classification.
-
-Supported classifications SHALL include:
+Every knowledge object SHALL include an epistemic classification. Supported classifications SHALL
+include:
 
 - User-asserted
 - Externally asserted
@@ -398,13 +447,10 @@ Supported classifications SHALL include:
 - Retracted
 - Unknown
 
-The framework SHALL NOT automatically promote assumptions or cultural stereotypes into established facts.
+The framework SHALL NOT automatically promote assumptions or cultural stereotypes into
+established facts.
 
-For example, from:
-
-"Seeta plays guitar."
-
-The framework MAY derive:
+For example, from "Seeta plays guitar." the framework MAY derive:
 
 - A user has asserted that Seeta plays guitar.
 - Seeta is described as participating in a guitar-playing activity.
@@ -418,9 +464,10 @@ The framework SHALL NOT conclude without additional evidence that:
 - Seeta is necessarily female.
 - Seeta necessarily wants to be contacted.
 
-Such propositions MAY be represented as hypotheses when supported by appropriately justified contextual evidence.
+Such propositions MAY be represented as hypotheses when supported by appropriately justified
+contextual evidence.
 
-### Principle 13: Knowledge Shall Support Confidence and Provenance
+#### P13. Knowledge Shall Support Confidence and Provenance
 
 Each knowledge object SHALL contain:
 
@@ -442,17 +489,14 @@ Each knowledge object SHALL contain:
 - Contradiction status
 - Domain classification
 
-The framework SHALL differentiate logical certainty from statistical confidence.
+- The framework SHALL differentiate logical certainty from statistical confidence.
+- Numerical confidence SHALL NOT be arbitrarily assigned to unsupported statements.
+- Every inferred conclusion SHALL have an inspectable justification.
 
-Numerical confidence SHALL NOT be arbitrarily assigned to unsupported statements.
+#### P14. Knowledge Shall Be Stored in an Extensible Knowledge Repository
 
-Every inferred conclusion SHALL have an inspectable justification.
-
-### Principle 14: Knowledge Shall Be Stored in an Extensible Knowledge Repository
-
-The system SHALL support persistent accumulation of knowledge.
-
-The knowledge repository SHALL provide:
+The system SHALL support persistent accumulation of knowledge. The knowledge repository SHALL
+provide:
 
 - Entity storage
 - Property storage
@@ -466,19 +510,16 @@ The knowledge repository SHALL provide:
 - Inference history
 - Efficient semantic retrieval
 
-A graph representation SHOULD be supported.
+- A graph representation SHOULD be supported.
+- Knowledge persistence SHALL be independent of the automata execution engine.
+- The repository SHALL support knowledge retraction, correction, expiry, and explicit deletion.
 
-Knowledge persistence SHALL be independent of the automata execution engine.
+### VI. Intelligence Synthesis (P15–P17)
 
-The repository SHALL support knowledge retraction, correction, expiry, and explicit deletion.
+#### P15. Intelligence Shall Be Represented as Contextual Decision Capability
 
----
-
-## VII. Intelligence Synthesis
-
-### Principle 15: Intelligence Shall Be Represented as Contextual Decision Capability
-
-The intelligence-processing stage SHALL transform available knowledge into contextual interpretations, goals, decisions, and candidate actions.
+The intelligence-processing stage SHALL transform available knowledge into contextual
+interpretations, goals, decisions, and candidate actions.
 
 An intelligence object SHALL contain, where applicable:
 
@@ -497,13 +538,11 @@ An intelligence object SHALL contain, where applicable:
 - Selection rationale
 - Execution requirements
 
-Intelligence synthesis SHALL support both conversational and non-conversational objectives.
+- Intelligence synthesis SHALL support both conversational and non-conversational objectives.
+- The framework SHALL NOT define intelligence solely as the production of external actions.
+- A decision to answer, request clarification, abstain, or perform no action SHALL be valid.
 
-The framework SHALL NOT define intelligence solely as the production of external actions.
-
-A decision to answer, request clarification, abstain, or perform no action SHALL be valid.
-
-### Principle 16: Intelligence Shall Support Progressive Decision Refinement
+#### P16. Intelligence Shall Support Progressive Decision Refinement
 
 The system SHALL progressively evaluate candidate actions according to:
 
@@ -519,13 +558,13 @@ The system SHALL progressively evaluate candidate actions according to:
 - User preferences
 - Operational feasibility
 
-The intelligence stage SHOULD prioritize a small number of well-supported candidate actions.
+- The intelligence stage SHOULD prioritize a small number of well-supported candidate actions.
+- However, the system SHALL NOT assume that fewer candidate actions always imply greater
+  intelligence.
+- The framework SHALL support retaining multiple candidates when uncertainty or legitimate
+  trade-offs require them.
 
-However, the system SHALL NOT assume that fewer candidate actions always imply greater intelligence.
-
-The framework SHALL support retaining multiple candidates when uncertainty or legitimate trade-offs require them.
-
-### Principle 17: Intelligence Synthesis Shall Distinguish Intent From Opportunity
+#### P17. Intelligence Synthesis Shall Distinguish Intent From Opportunity
 
 The system SHALL distinguish:
 
@@ -534,25 +573,18 @@ The system SHALL distinguish:
 3. A suggested action
 4. A possible but unsolicited action
 
-For example, receiving:
+For example, receiving "Seeta plays guitar." SHALL NOT automatically authorize sending Seeta a
+message.
 
-"Seeta plays guitar."
+- The system MAY respond conversationally or propose a contextually relevant next step.
+- Sending a message SHALL require an appropriate authorized request, recipient resolution, and
+  applicable confirmation.
 
-SHALL NOT automatically authorize sending Seeta a message.
+### VII. Action Selection and Execution (P18–P20)
 
-The system MAY respond conversationally or propose a contextually relevant next step.
+#### P18. All Actions Shall Be Governed by Finite Automata
 
-Sending a message SHALL require an appropriate authorized request, recipient resolution, and applicable confirmation.
-
----
-
-## VIII. Action Selection and Execution
-
-### Principle 18: All Actions Shall Be Governed by Finite Automata
-
-The Action Execution Engine SHALL use finite-state automata.
-
-The action lifecycle SHALL include:
+The Action Execution Engine SHALL use finite-state automata. The action lifecycle SHALL include:
 
 - Candidate identified
 - Preconditions evaluated
@@ -566,15 +598,13 @@ The action lifecycle SHALL include:
 - Compensation or recovery
 - Audit recorded
 
-Action execution SHALL NOT bypass authorization or policy states.
+- Action execution SHALL NOT bypass authorization or policy states.
+- The framework SHALL support both synchronous and asynchronous external operations.
 
-The framework SHALL support both synchronous and asynchronous external operations.
+#### P19. Actions Shall Be Typed and Extensible
 
-### Principle 19: Actions Shall Be Typed and Extensible
-
-Actions SHALL be represented as typed objects.
-
-The framework SHALL support action categories including:
+Actions SHALL be represented as typed objects. The framework SHALL support action categories
+including:
 
 - Conversational reply
 - Clarification request
@@ -593,11 +623,10 @@ The framework SHALL support action categories including:
 - Scheduled operation
 - Composite workflow
 
-The system SHALL provide a standardized action-handler interface.
+- The system SHALL provide a standardized action-handler interface.
+- New action types SHALL be registerable without modifying the cognitive lifecycle.
 
-New action types SHALL be registerable without modifying the cognitive lifecycle.
-
-### Principle 20: External Actions Shall Require Explicit Security Controls
+#### P20. External Actions Shall Require Explicit Security Controls
 
 The system SHALL distinguish between reasoning about an action and actually performing it.
 
@@ -614,21 +643,17 @@ External actions SHALL be subject to:
 - Error handling
 - Cancellation where possible
 
-Operations affecting external recipients, financial resources, private information, physical devices, or irreversible state SHALL require appropriate safeguards.
+- Operations affecting external recipients, financial resources, private information, physical
+  devices, or irreversible state SHALL require appropriate safeguards.
+- Actions affecting physical machinery SHALL additionally require independent operational safety
+  controls and fail-safe behavior.
+- No dynamically generated inference SHALL override execution permissions.
 
-Actions affecting physical machinery SHALL additionally require independent operational safety controls and fail-safe behavior.
+### VIII. Hierarchical Automata Organization (P21–P25)
 
-No dynamically generated inference SHALL override execution permissions.
+#### P21. The Root Cognitive Automaton Shall Coordinate All Stages
 
----
-
-## IX. Hierarchical Automata Organization
-
-### Principle 21: The Root Cognitive Automaton Shall Coordinate All Stages
-
-The root automaton SHALL be named `CognitiveLifecycleAutomaton`.
-
-Its primary states SHALL be:
+The root automaton SHALL be named `CognitiveLifecycleAutomaton`. Its primary states SHALL be:
 
 ```text
 Idle
@@ -658,9 +683,10 @@ FeedbackAssimilation
 Idle
 ```
 
-Error, clarification, cancellation, and recovery transitions SHALL be supported throughout the lifecycle.
+Error, clarification, cancellation, and recovery transitions SHALL be supported throughout the
+lifecycle.
 
-### Principle 22: Information Processing Shall Have Subordinate Automata
+#### P22. Information Processing Shall Have Subordinate Automata
 
 The `InformationConstructionAutomaton` SHALL coordinate subordinate processing units including:
 
@@ -674,7 +700,7 @@ The `InformationConstructionAutomaton` SHALL coordinate subordinate processing u
 
 Each subordinate automaton SHALL expose a standardized execution contract.
 
-### Principle 23: Knowledge Processing Shall Have Subordinate Automata
+#### P23. Knowledge Processing Shall Have Subordinate Automata
 
 The `KnowledgeConstructionAutomaton` SHALL coordinate:
 
@@ -688,7 +714,7 @@ The `KnowledgeConstructionAutomaton` SHALL coordinate:
 - `KnowledgeValidationAutomaton`
 - `KnowledgePersistenceAutomaton`
 
-### Principle 24: Intelligence Processing Shall Have Subordinate Automata
+#### P24. Intelligence Processing Shall Have Subordinate Automata
 
 The `IntelligenceSynthesisAutomaton` SHALL coordinate:
 
@@ -700,7 +726,7 @@ The `IntelligenceSynthesisAutomaton` SHALL coordinate:
 - `RiskAssessmentAutomaton`
 - `ActionRecommendationAutomaton`
 
-### Principle 25: Automata Shall Be Composable and Reusable
+#### P25. Automata Shall Be Composable and Reusable
 
 Every automaton SHALL expose a standard contract containing:
 
@@ -716,19 +742,15 @@ Every automaton SHALL expose a standard contract containing:
 - Execution limits
 - Cancellation support
 
-The framework SHALL permit the reuse of the same automaton across multiple cognitive stages.
+- The framework SHALL permit the reuse of the same automaton across multiple cognitive stages.
+- All automata SHALL be testable independently.
 
-All automata SHALL be testable independently.
+### IX. Rule Engine and Inference Grammar (P26–P28)
 
----
+#### P26. A General-Purpose Rule Engine Shall Govern Derivation
 
-## X. Rule Engine and Inference Grammar
-
-### Principle 26: A General-Purpose Rule Engine Shall Govern Derivation
-
-The framework SHALL implement a domain-neutral rule engine.
-
-Rules SHALL be expressible independently of the finite-state control mechanism.
+- The framework SHALL implement a domain-neutral rule engine.
+- Rules SHALL be expressible independently of the finite-state control mechanism.
 
 A rule SHALL define:
 
@@ -745,11 +767,9 @@ A rule SHALL define:
 - Conflict-resolution strategy
 - Version
 
-### Principle 27: Rules Shall Support Declarative Expressions
+#### P27. Rules Shall Support Declarative Expressions
 
-The framework SHOULD implement a formal rule grammar.
-
-An illustrative grammar is:
+The framework SHOULD implement a formal rule grammar. An illustrative grammar is:
 
 ```ebnf
 Rule             = "RULE", Identifier,
@@ -800,31 +820,26 @@ RequestClarification
 EmitEvent        = "EMIT", EventExpression ;
 ```
 
-The grammar SHALL be extended to support negation, quantification, variable binding, temporal constraints, rule scopes, and inference provenance.
+The grammar SHALL be extended to support negation, quantification, variable binding, temporal
+constraints, rule scopes, and inference provenance.
 
-### Principle 28: Domain Rules Shall Be Dynamically Extensible
+#### P28. Domain Rules Shall Be Dynamically Extensible
 
-The rule engine SHALL support rules implemented through dynamically compiled code.
+- The rule engine SHALL support rules implemented through dynamically compiled code.
+- For the initial implementation, C# MAY be used as the rule implementation language.
+- Dynamically loaded rules SHALL operate through versioned interfaces.
+- Rules SHALL NOT be permitted to access unrestricted operating-system, network, or storage
+  functionality.
+- Untrusted dynamically compiled code SHALL execute within appropriate process or service
+  isolation, using resource and permission restrictions.
+- Rules SHALL be independently versioned, testable, and auditable.
 
-For the initial implementation, C# MAY be used as the rule implementation language.
+### X. Multilingual Architecture (P29–P31)
 
-Dynamically loaded rules SHALL operate through versioned interfaces.
+#### P29. Natural-Language Grammars Shall Be Modular
 
-Rules SHALL not be permitted to access unrestricted operating-system, network, or storage functionality.
-
-Untrusted dynamically compiled code SHALL execute within appropriate process or service isolation, using resource and permission restrictions.
-
-Rules SHALL be independently versioned, testable, and auditable.
-
----
-
-## XI. Multilingual Architecture
-
-### Principle 29: Natural-Language Grammars Shall Be Modular
-
-Each supported language SHALL have an independently configurable language pack.
-
-A language pack SHALL contain:
+Each supported language SHALL have an independently configurable language pack. A language pack
+SHALL contain:
 
 - Language identification rules
 - Script information
@@ -839,25 +854,17 @@ A language pack SHALL contain:
 
 The framework SHALL permit multiple versions of the same language pack.
 
-### Principle 30: Canonical Knowledge Shall Be Language-Neutral
+#### P30. Canonical Knowledge Shall Be Language-Neutral
 
 The framework SHALL separate linguistic surface forms from underlying semantic concepts.
 
-For example:
+For example, "Seeta plays guitar." and "सीता गिटार बजाती है।" SHOULD be convertible into
+semantically compatible internal propositions.
 
-"Seeta plays guitar."
+- Knowledge inferred from one supported language SHALL be available when processing another.
+- The system SHALL preserve language-specific differences that cannot be translated without loss.
 
-and
-
-"सीता गिटार बजाती है।"
-
-SHOULD be convertible into semantically compatible internal propositions.
-
-Knowledge inferred from one supported language SHALL be available when processing another.
-
-The system SHALL preserve language-specific differences that cannot be translated without loss.
-
-### Principle 31: Multilingual Conversations Shall Be Supported
+#### P31. Multilingual Conversations Shall Be Supported
 
 The framework SHALL support:
 
@@ -871,15 +878,12 @@ The framework SHALL support:
 
 A conversational session SHALL NOT be permanently bound to its initial language.
 
----
+### XI. Conversational Intelligence (P32–P34)
 
-## XII. Conversational Intelligence
+#### P32. Conversation Shall Be Context-Aware
 
-### Principle 32: Conversation Shall Be Context-Aware
-
-The application SHALL maintain a structured conversational context.
-
-Conversational context SHALL include:
+The application SHALL maintain a structured conversational context. Conversational context SHALL
+include:
 
 - Current topic
 - Speaker references
@@ -894,11 +898,10 @@ Conversational context SHALL include:
 
 The framework SHALL distinguish temporary conversational context from persistent knowledge.
 
-### Principle 33: Conversational Output Shall Be Governed by Knowledge
+#### P33. Conversational Output Shall Be Governed by Knowledge
 
-A conversational response SHALL be grounded in available information, knowledge, or explicitly identified uncertainty.
-
-The system SHALL support:
+A conversational response SHALL be grounded in available information, knowledge, or explicitly
+identified uncertainty. The system SHALL support:
 
 - Questions
 - Answers
@@ -912,19 +915,16 @@ The system SHALL support:
 
 The framework SHALL NOT present hypotheses as verified facts.
 
-### Principle 34: Personality and Response Style Shall Be Separately Configurable
+#### P34. Personality and Response Style Shall Be Separately Configurable
 
-The system MAY include a configurable conversational personality.
+- The system MAY include a configurable conversational personality.
+- Personality SHALL influence presentation, tone, and preference-sensitive choices.
+- Personality SHALL NOT alter the epistemic status of facts or bypass safety and authorization
+  rules.
 
-Personality SHALL influence presentation, tone, and preference-sensitive choices.
+### XII. Memory and Learning (P35–P37)
 
-Personality SHALL NOT alter the epistemic status of facts or bypass safety and authorization rules.
-
----
-
-## XIII. Memory and Learning
-
-### Principle 35: Cognitive Memory Shall Be Layered
+#### P35. Cognitive Memory Shall Be Layered
 
 The system SHALL distinguish:
 
@@ -936,17 +936,15 @@ The system SHALL distinguish:
 
 Each memory category SHALL define its retention, retrieval, and deletion policies.
 
-### Principle 36: Learning Shall Be Evidence-Based
+#### P36. Learning Shall Be Evidence-Based
 
-The system SHALL support updating its knowledge from new observations.
+- The system SHALL support updating its knowledge from new observations.
+- A new statement SHALL NOT automatically invalidate existing knowledge.
+- Conflicting statements SHALL undergo contradiction analysis.
+- The framework SHALL support incremental learning without requiring modification of the core
+  automata.
 
-A new statement SHALL NOT automatically invalidate existing knowledge.
-
-Conflicting statements SHALL undergo contradiction analysis.
-
-The framework SHALL support incremental learning without requiring modification of the core automata.
-
-### Principle 37: Feedback Shall Improve Future Decisions
+#### P37. Feedback Shall Improve Future Decisions
 
 The framework SHALL record permitted feedback concerning:
 
@@ -958,17 +956,16 @@ The framework SHALL record permitted feedback concerning:
 - Execution failures
 - Explicit user corrections
 
-Feedback MAY influence future rule selection, context interpretation, and recommendation ranking.
+- Feedback MAY influence future rule selection, context interpretation, and recommendation
+  ranking.
+- Changes to learned behavior SHALL remain traceable and reversible where practical.
 
-Changes to learned behavior SHALL remain traceable and reversible where practical.
+### XIII. Extensible Computational Intelligence (P38–P40)
 
----
+#### P38. Deterministic and Probabilistic Processing Shall Coexist
 
-## XIV. Extensible Computational Intelligence
-
-### Principle 38: Deterministic and Probabilistic Processing Shall Coexist
-
-The framework SHALL support deterministic finite-state orchestration and both deterministic and probabilistic computational services.
+The framework SHALL support deterministic finite-state orchestration and both deterministic and
+probabilistic computational services.
 
 The following processing strategies MAY be incorporated:
 
@@ -983,19 +980,20 @@ The following processing strategies MAY be incorporated:
 - Numerical optimization
 - Planning algorithms
 
-The selected processing strategy SHALL be declared and auditable.
+- The selected processing strategy SHALL be declared and auditable.
+- The finite-state orchestration layer SHALL remain responsible for execution progression, error
+  handling, and authorization boundaries.
 
-The finite-state orchestration layer SHALL remain responsible for execution progression, error handling, and authorization boundaries.
+#### P39. Cognitive Processing Shall Support Pluggable Engines
 
-### Principle 39: Cognitive Processing SHALL Support Pluggable Engines
+- Language and intelligence processing components SHALL be replaceable through defined
+  interfaces.
+- The framework SHALL permit replacing one parser, inference engine, or reasoning implementation
+  without rewriting the root cognitive lifecycle.
+- External intelligence services SHALL be optional dependencies rather than mandatory
+  architectural foundations.
 
-Language and intelligence processing components SHALL be replaceable through defined interfaces.
-
-The framework SHALL permit replacing one parser, inference engine, or reasoning implementation without rewriting the root cognitive lifecycle.
-
-External intelligence services SHALL be optional dependencies rather than mandatory architectural foundations.
-
-### Principle 40: Reasoning Shall Be Bounded and Observable
+#### P40. Reasoning Shall Be Bounded and Observable
 
 The system SHALL protect against:
 
@@ -1009,15 +1007,13 @@ The system SHALL protect against:
 
 Processing budgets and termination criteria SHALL be configurable.
 
----
+### XIV. Technical Implementation (P41–P44)
 
-## XV. Technical Implementation Principles
+#### P41. Core Framework Shall Be Strongly Typed
 
-### Principle 41: Core Framework Shall Be Strongly Typed
-
-The initial implementation SHOULD use modern C# and a supported .NET runtime.
-
-The architecture SHALL favor well-defined interfaces, immutable processing results where practical, and strongly typed domain models.
+- The initial implementation SHOULD use modern C# and a supported .NET runtime.
+- The architecture SHALL favor well-defined interfaces, immutable processing results where
+  practical, and strongly typed domain models.
 
 The following foundational abstractions SHOULD be provided:
 
@@ -1038,7 +1034,9 @@ The following foundational abstractions SHOULD be provided:
 - `IActionAuthorizationService`
 - `IConversationMemory`
 
-### Principle 42: Architecture Shall Separate Responsibilities
+(Lexical abstractions are defined in P59.)
+
+#### P42. Architecture Shall Separate Responsibilities
 
 The framework SHALL use distinct architectural layers:
 
@@ -1053,11 +1051,10 @@ The framework SHALL use distinct architectural layers:
 
 Each layer SHALL communicate through explicit contracts.
 
-### Principle 43: Interfaces Shall Support Multiple Client Types
+#### P43. Interfaces Shall Support Multiple Client Types
 
-The system SHALL support an API-first architecture.
-
-The cognitive framework SHALL remain independent of its user interface.
+- The system SHALL support an API-first architecture.
+- The cognitive framework SHALL remain independent of its user interface.
 
 Potential clients SHALL include:
 
@@ -1069,19 +1066,16 @@ Potential clients SHALL include:
 - Voice interfaces
 - Autonomous application integrations
 
-### Principle 44: Long-Running Operations Shall Be Supported
+#### P44. Long-Running Operations Shall Be Supported
 
-The system SHALL accommodate external actions that complete asynchronously.
+- The system SHALL accommodate external actions that complete asynchronously.
+- Automata execution contexts SHALL support suspension, persistence, resumption, cancellation,
+  and recovery.
+- State persistence SHALL be explicit and version-aware.
 
-Automata execution contexts SHALL support suspension, persistence, resumption, cancellation, and recovery.
+### XV. Verification and Testing (P45–P49)
 
-State persistence SHALL be explicit and version-aware.
-
----
-
-## XVI. Verification and Testing
-
-### Principle 45: All Automata Shall Be Testable
+#### P45. All Automata Shall Be Testable
 
 Each automaton SHALL have automated tests covering:
 
@@ -1096,11 +1090,9 @@ Each automaton SHALL have automated tests covering:
 - Execution limits
 - Recovery behavior
 
-### Principle 46: Grammar Correctness Shall Be Measurable
+#### P46. Grammar Correctness Shall Be Measurable
 
-Each language pack SHALL maintain a versioned grammatical test corpus.
-
-Tests SHALL include:
+Each language pack SHALL maintain a versioned grammatical test corpus. Tests SHALL include:
 
 - Valid simple sentences
 - Compound and complex sentences
@@ -1115,7 +1107,7 @@ Tests SHALL include:
 
 The system SHALL evaluate parsing and semantic extraction against annotated expected results.
 
-### Principle 47: Knowledge Inference Shall Be Explainable and Verifiable
+#### P47. Knowledge Inference Shall Be Explainable and Verifiable
 
 Every inference rule SHALL have:
 
@@ -1127,19 +1119,16 @@ Every inference rule SHALL have:
 
 The framework SHALL test that unsupported conclusions are not promoted to established facts.
 
-### Principle 48: Actions Shall Be Tested Independently
+#### P48. Actions Shall Be Tested Independently
 
-Action handlers SHALL be testable without invoking real external applications.
+- Action handlers SHALL be testable without invoking real external applications.
+- Mock integrations SHALL be used for automated testing.
+- Real external actions SHALL require explicit integration-test authorization.
 
-Mock integrations SHALL be used for automated testing.
+#### P49. Acceptance Criteria Shall Be Quantifiable
 
-Real external actions SHALL require explicit integration-test authorization.
-
-### Principle 49: Acceptance Criteria Shall Be Quantifiable
-
-Every feature specification SHALL define measurable acceptance criteria.
-
-Applicable metrics SHOULD include:
+Every feature specification SHALL define measurable acceptance criteria. Applicable metrics
+SHOULD include:
 
 - Language identification accuracy
 - Parsing accuracy
@@ -1153,33 +1142,28 @@ Applicable metrics SHOULD include:
 - Unauthorized action count
 - End-to-end response latency
 
-Metrics SHALL be measured against explicitly identified evaluation datasets.
+- Metrics SHALL be measured against explicitly identified evaluation datasets.
+- No arbitrary accuracy claim SHALL be treated as an implemented capability.
 
-No arbitrary accuracy claim SHALL be treated as an implemented capability.
+### XVI. Security, Privacy, and Trust (P50–P52)
 
----
+#### P50. User Data Shall Be Governed by Explicit Policies
 
-## XVII. Security, Privacy, and Trust
+- The framework SHALL classify and protect data according to its sensitivity.
+- Personal information SHALL NOT be shared with external systems without an appropriate legal
+  basis and authorization.
+- Persistent user memories SHALL support inspection and deletion.
+- Knowledge derived from private communications SHALL retain applicable privacy restrictions.
 
-### Principle 50: User Data Shall Be Governed by Explicit Policies
+#### P51. Untrusted Input Shall Not Become Executable Authority
 
-The framework SHALL classify and protect data according to its sensitivity.
+- Natural-language input, retrieved documents, generated rules, and external messages SHALL be
+  treated according to their trust levels.
+- No untrusted text SHALL directly modify execution permissions, system policies, or action
+  authorization requirements.
+- The system SHALL defend against instruction injection and unauthorized tool invocation.
 
-Personal information SHALL not be shared with external systems without an appropriate legal basis and authorization.
-
-Persistent user memories SHALL support inspection and deletion.
-
-Knowledge derived from private communications SHALL retain applicable privacy restrictions.
-
-### Principle 51: Untrusted Input Shall Not Become Executable Authority
-
-Natural-language input, retrieved documents, generated rules, and external messages SHALL be treated according to their trust levels.
-
-No untrusted text SHALL directly modify execution permissions, system policies, or action authorization requirements.
-
-The system SHALL defend against instruction injection and unauthorized tool invocation.
-
-### Principle 52: Every External Action Shall Be Auditable
+#### P52. Every External Action Shall Be Auditable
 
 External action records SHALL include:
 
@@ -1195,95 +1179,11 @@ External action records SHALL include:
 
 Audit data SHALL follow applicable retention and privacy policies.
 
----
+### XVII. Development Discipline (P53–P55)
 
-## XVIII. Reference Cognitive Processing Scenario
+#### P53. Development Shall Be Specification-Driven
 
-### Input
-
-"Seeta plays guitar."
-
-### Stage A: Data
-
-The system SHALL store the original sentence and associated source metadata.
-
-### Stage B: Information
-
-The information processor SHALL identify:
-
-- Subject: Seeta
-- Subject category: Person or named entity, subject to resolution
-- Predicate: plays guitar
-- Verb lemma: play
-- Verb tense: simple present
-- Grammatical person: third person
-- Grammatical number: singular
-- Object: guitar
-- Object category: Musical instrument
-- Semantic actor: Seeta
-- Semantic activity: playing a guitar
-- Polarity: affirmative
-- Sentence type: declarative
-
-Person-specific gender SHALL remain unknown unless provided by contextual evidence.
-
-### Stage C: Knowledge
-
-The knowledge processor SHALL create the explicit proposition:
-
-`PlaysInstrument(Seeta, Guitar)`
-
-The proposition SHALL initially be attributed to the speaker.
-
-The framework MAY derive:
-
-`Instrument(Guitar)`
-
-from established domain knowledge.
-
-It MAY derive a qualified hypothesis such as:
-
-`PossiblyHasSkill(Seeta, GuitarPlaying)`
-
-The knowledge processor SHALL preserve supporting evidence and inference provenance.
-
-### Stage D: Intelligence
-
-The intelligence processor SHALL evaluate possible interpretations and responses.
-
-Potential candidate actions MAY include:
-
-- Acknowledge the statement
-- Ask whether Seeta plays professionally
-- Ask whether the user also plays an instrument
-- Suggest a musical collaboration if relevant
-- Offer to draft an invitation if context warrants it
-
-The system SHALL rank or filter candidates according to available context.
-
-It SHALL NOT assume that an external action is desirable merely because one is technically possible.
-
-### Stage E: Action
-
-For an ordinary informational statement with no additional request, the system MAY produce a conversational response such as:
-
-"Does Seeta play guitar professionally, or is it a hobby?"
-
-If the user explicitly requests a message invitation, the action processor MAY generate a draft and, with the necessary authorization, send the message through an installed messaging integration.
-
-### Stage F: Feedback
-
-The system SHALL record permitted conversational feedback and update contextual understanding.
-
----
-
-## XIX. Development Discipline
-
-### Principle 53: Development Shall Be Specification-Driven
-
-Development SHALL follow the GitHub Spec Kit workflow.
-
-Every implementation feature SHALL have:
+Development SHALL follow the GitHub Spec Kit workflow. Every implementation feature SHALL have:
 
 - A written specification
 - Functional requirements
@@ -1293,120 +1193,57 @@ Every implementation feature SHALL have:
 - A task breakdown
 - Automated validation
 
-### Principle 54: Foundational Components Shall Be Implemented First
+#### P54. Foundational Components Shall Be Implemented First
 
-The initial implementation SHALL prioritize:
+- The initial implementation SHALL prioritize foundational components in the order defined in
+  **Development Workflow & Implementation Sequence → Mandatory Development Sequence**.
+- Advanced features SHALL build upon validated foundational components.
 
-1. Finite-state automata framework
-2. Hierarchical automata composition
-3. Data and information models
-4. English-language parsing
-5. Canonical semantic representations
-6. Structured knowledge storage
-7. Deterministic knowledge inference
-8. Basic intelligence synthesis
-9. Conversational responses
-10. Controlled action execution
+#### P55. Architectural Boundaries Shall Be Maintained
 
-Advanced features SHALL build upon validated foundational components.
+- No feature SHALL directly couple grammatical parsing to an external action handler.
+- No feature SHALL bypass the knowledge validation and action authorization boundaries.
+- Core automata SHALL NOT contain hard-coded application-specific behavior.
+- Domain-specific behavior SHALL reside in pluggable grammars, rules, policies, and action
+  handlers.
 
-### Principle 55: Architectural Boundaries Shall Be Maintained
+### XVIII. English-First Language Scope (P56)
 
-No feature SHALL directly couple grammatical parsing to an external action handler.
+#### P56. English Shall Be the Initial Natural Language
 
-No feature SHALL bypass the knowledge validation and action authorization boundaries.
+- The first production implementation of HCIF SHALL target English exclusively.
+- All foundational natural-language comprehension, information extraction, knowledge
+  construction, intelligence synthesis, and conversational response mechanisms SHALL first be
+  implemented and validated using English.
+- The architecture SHALL preserve language-neutral abstractions to accommodate additional
+  languages in subsequent releases.
+- Other language grammars SHALL NOT be required for initial acceptance.
+- The implementation SHALL NOT embed English-specific assumptions into the core finite-state
+  automata.
+- English-specific rules SHALL reside within the English language module.
 
-Core automata SHALL not contain hard-coded application-specific behavior.
+### XIX. Mandatory English Lexical Knowledge Base (P57–P60)
 
-Domain-specific behavior SHALL reside in pluggable grammars, rules, policies, and action handlers.
+#### P57. Open English WordNet 2025 Shall Be the Foundational Dictionary
 
----
+The system SHALL use **Open English WordNet 2025 — JSON Edition** as its primary English
+lexical-semantic knowledge base.
 
-## XX. Governance
+| Item | Value |
+|------|-------|
+| Official source | https://en-word.net/ |
+| Official JSON dataset | https://en-word.net/static/english-wordnet-2025-json.zip |
+| Source repository | https://github.com/globalwordnet/english-wordnet |
+| License | Creative Commons Attribution 4.0, subject to applicable underlying resource notices |
 
-### Amendment Procedure
+- The dictionary SHALL be downloaded, validated, imported, and indexed as part of the project's
+  reproducible data-initialization process.
+- The application SHALL NOT require live internet access for ordinary dictionary lookup after
+  installation.
+- The original downloaded dataset SHALL be preserved separately from the application's internal
+  lexical representation.
 
-Changes to this constitution SHALL require:
-
-1. A documented amendment proposal
-2. Identification of affected principles
-3. Architectural impact analysis
-4. Compatibility assessment
-5. Updated validation requirements
-6. Version increment
-7. Amendment approval
-
-### Versioning Policy
-
-The constitution SHALL use semantic versioning.
-
-- MAJOR: Removal or incompatible modification of foundational principles
-- MINOR: Addition of new principles or substantial extensions
-- PATCH: Clarifications that do not materially change architectural obligations
-
-### Compliance
-
-Feature specifications, implementation plans, and task definitions SHALL reference applicable constitutional principles.
-
-Any deviation SHALL be explicitly justified and documented.
-
-### Foundational Priority
-
-When implementation convenience conflicts with these principles, correctness, explainability, security, and extensibility SHALL take precedence.
-
----
-
-## Constitutional Objective
-
-The ultimate objective of HCIF is to construct an extensible artificial intelligence framework in which natural-language communication is systematically transformed into structured information, evidence-grounded knowledge, contextual intelligence, and authorized actions.
-
-Hierarchical finite automata SHALL provide the execution discipline, grammatical systems SHALL provide linguistic comprehension, knowledge engines SHALL provide inference, and decision engines SHALL provide context-sensitive behavior.
-
-The architecture SHALL make every processing stage independently understandable, testable, replaceable, and extensible across languages and application domains.
-
-### Principle 56: English Shall Be the Initial Natural Language
-
-The first production implementation of HCIF SHALL target English exclusively.
-
-All foundational natural-language comprehension, information extraction, knowledge construction, intelligence synthesis, and conversational response mechanisms SHALL first be implemented and validated using English.
-
-The architecture SHALL preserve language-neutral abstractions to accommodate additional languages in subsequent releases.
-
-Other language grammars SHALL NOT be required for initial acceptance.
-
-The implementation SHALL NOT embed English-specific assumptions into the core finite-state automata.
-
-English-specific rules SHALL reside within the English language module.
-
----
-
-## II. Mandatory English Lexical Knowledge Base
-
-### Principle 57: Open English WordNet 2025 Shall Be the Foundational Dictionary
-
-The system SHALL use **Open English WordNet 2025 — JSON Edition** as its primary English lexical-semantic knowledge base.
-
-**Official source:**
-
-https://en-word.net/
-
-**Official JSON dataset:**
-
-https://en-word.net/static/english-wordnet-2025-json.zip
-
-**Source repository:**
-
-https://github.com/globalwordnet/english-wordnet
-
-**License:** Creative Commons Attribution 4.0, subject to applicable underlying resource notices.
-
-The dictionary SHALL be downloaded, validated, imported, and indexed as part of the project's reproducible data-initialization process.
-
-The application SHALL NOT require live internet access for ordinary dictionary lookup after installation.
-
-The original downloaded dataset SHALL be preserved separately from the application's internal lexical representation.
-
-### Principle 58: Dictionary Coverage Shall Include Lexical and Semantic Knowledge
+#### P58. Dictionary Coverage Shall Include Lexical and Semantic Knowledge
 
 The lexical knowledge base SHALL support retrieval of:
 
@@ -1427,17 +1264,15 @@ The lexical knowledge base SHALL support retrieval of:
 - Available usage examples
 - Other relationships provided by the source dataset
 
-The implementation SHALL preserve source identifiers and relationship semantics.
+- The implementation SHALL preserve source identifiers and relationship semantics.
+- The system SHALL NOT assume that every lexical entry contains every relationship type.
+- Dictionary data SHALL be treated as a source of lexical and semantic evidence, not as a
+  complete representation of real-world knowledge.
 
-The system SHALL NOT assume that every lexical entry contains every relationship type.
+#### P59. A Dictionary Abstraction Layer Is Mandatory
 
-Dictionary data SHALL be treated as a source of lexical and semantic evidence, not as a complete representation of real-world knowledge.
-
-### Principle 59: A Dictionary Abstraction Layer Is Mandatory
-
-The framework SHALL implement a dictionary abstraction independent of Open English WordNet's physical JSON representation.
-
-The abstraction SHALL expose operations for:
+The framework SHALL implement a dictionary abstraction independent of Open English WordNet's
+physical JSON representation. The abstraction SHALL expose operations for:
 
 - Word lookup
 - Lemma lookup
@@ -1462,11 +1297,9 @@ The foundational interfaces SHOULD include:
 
 The dictionary provider SHALL be replaceable without modifying the hierarchical automata.
 
-### Principle 60: JSON Import Shall Be Schema-Aware and Versioned
+#### P60. JSON Import Shall Be Schema-Aware and Versioned
 
-The framework SHALL implement a dedicated JSON dictionary importer.
-
-The importer SHALL:
+The framework SHALL implement a dedicated JSON dictionary importer. The importer SHALL:
 
 1. Download the specified dictionary release.
 2. Verify archive integrity and source metadata.
@@ -1479,23 +1312,17 @@ The importer SHALL:
 9. Record the imported dictionary version.
 10. Generate an import validation report.
 
-The importer SHALL NOT assume undocumented JSON property names or structures.
+- The importer SHALL NOT assume undocumented JSON property names or structures.
+- Imported lexical entities SHALL preserve their source identifiers.
+- Dictionary import SHALL be repeatable and idempotent.
+- Failures SHALL be recoverable without corrupting an existing validated dictionary.
 
-Imported lexical entities SHALL preserve their source identifiers.
+### XX. Dictionary-Assisted Grammatical Comprehension (P61–P63)
 
-Dictionary import SHALL be repeatable and idempotent.
+#### P61. Lexical Lookup Shall Be Integrated into Information Construction
 
-Failures SHALL be recoverable without corrupting an existing validated dictionary.
-
----
-
-## III. Dictionary-Assisted Grammatical Comprehension
-
-### Principle 61: Lexical Lookup Shall Be Integrated into Information Construction
-
-The `InformationConstructionAutomaton` SHALL invoke the lexical dictionary during language comprehension.
-
-The following processing sequence SHALL be supported:
+The `InformationConstructionAutomaton` SHALL invoke the lexical dictionary during language
+comprehension. The following processing sequence SHALL be supported:
 
 1. Acquire English sentence.
 2. Tokenize the sentence.
@@ -1508,15 +1335,13 @@ The following processing sequence SHALL be supported:
 9. Assign semantic roles.
 10. Construct canonical information objects.
 
-The framework SHALL support tokens absent from the dictionary, including personal names, newly coined words, abbreviations, and domain-specific terminology.
+- The framework SHALL support tokens absent from the dictionary, including personal names, newly
+  coined words, abbreviations, and domain-specific terminology.
+- Unknown vocabulary SHALL NOT automatically terminate grammatical comprehension.
 
-Unknown vocabulary SHALL NOT automatically terminate grammatical comprehension.
+#### P62. Word-Sense Disambiguation Shall Be Context-Aware
 
-### Principle 62: Word-Sense Disambiguation Shall Be Context-Aware
-
-The system SHALL recognize that a word may have multiple meanings.
-
-For example:
+The system SHALL recognize that a word may have multiple meanings. For example:
 
 - "She plays guitar."
 - "He plays football."
@@ -1524,13 +1349,13 @@ For example:
 
 The verb "play" occurs in different semantic contexts.
 
-The framework SHALL use grammatical structure, surrounding words, semantic relations, and conversational context to identify candidate meanings.
+- The framework SHALL use grammatical structure, surrounding words, semantic relations, and
+  conversational context to identify candidate meanings.
+- The system SHALL preserve competing meanings when reliable disambiguation is not possible.
+- A dictionary's available senses SHALL NOT be treated as proof that a particular interpretation
+  is correct.
 
-The system SHALL preserve competing meanings when reliable disambiguation is not possible.
-
-A dictionary's available senses SHALL NOT be treated as proof that a particular interpretation is correct.
-
-### Principle 63: Morphological Analysis Shall Complement WordNet
+#### P63. Morphological Analysis Shall Complement WordNet
 
 The system SHALL support recognition of word inflections, including:
 
@@ -1541,43 +1366,26 @@ The system SHALL support recognition of word inflections, including:
 - Irregular forms
 - Common derivational constructions
 
-For example:
+For example: `plays → play`, `played → play`, `playing → play`.
 
-`plays → play`
+- The system SHALL employ grammatical and morphological rules where the primary dictionary does
+  not provide sufficient inflectional information.
+- Morphological analysis SHALL remain distinct from semantic inference.
 
-`played → play`
+### XXI. Dictionary-Assisted Knowledge Construction (P64–P66)
 
-`playing → play`
+#### P64. Semantic Relationships Shall Support Knowledge Inference
 
-The system SHALL employ grammatical and morphological rules where the primary dictionary does not provide sufficient inflectional information.
+The `KnowledgeConstructionAutomaton` SHALL use WordNet's semantic relationships when applying
+inference rules.
 
-Morphological analysis SHALL remain distinct from semantic inference.
+For example, given "Seeta plays guitar." the framework MAY derive the following sequence:
 
----
-
-## IV. Dictionary-Assisted Knowledge Construction
-
-### Principle 64: Semantic Relationships Shall Support Knowledge Inference
-
-The `KnowledgeConstructionAutomaton` SHALL use WordNet's semantic relationships when applying inference rules.
-
-For example, given:
-
-"Seeta plays guitar."
-
-The framework MAY derive the following sequence:
-
-**Explicit assertion**
-
-`PlaysInstrument(Seeta, Guitar)`
-
-**Lexical-semantic grounding**
-
-`Guitar → MusicalInstrument`
-
-**Derived proposition**
-
-`PlaysMusicalInstrument(Seeta)`
+| Step | Result |
+|------|--------|
+| Explicit assertion | `PlaysInstrument(Seeta, Guitar)` |
+| Lexical-semantic grounding | `Guitar → MusicalInstrument` |
+| Derived proposition | `PlaysMusicalInstrument(Seeta)` |
 
 The derived proposition SHALL reference:
 
@@ -1587,17 +1395,14 @@ The derived proposition SHALL reference:
 - The inference timestamp
 - The epistemic classification
 
-The system SHALL distinguish taxonomic relations from logical implications, correlations, and hypotheses.
+The system SHALL distinguish taxonomic relations from logical implications, correlations, and
+hypotheses.
 
-### Principle 65: Dictionary Knowledge Shall Not Justify Unsupported Personal Conclusions
+#### P65. Dictionary Knowledge Shall Not Justify Unsupported Personal Conclusions
 
 WordNet relations SHALL NOT be used to infer personal attributes that lack sufficient evidence.
 
-For example, from:
-
-"Seeta plays guitar."
-
-The framework SHALL NOT automatically conclude:
+For example, from "Seeta plays guitar." the framework SHALL NOT automatically conclude:
 
 - Seeta is female.
 - Seeta is kind.
@@ -1605,15 +1410,14 @@ The framework SHALL NOT automatically conclude:
 - Seeta is a professional musician.
 - Seeta wants to receive a message.
 
-The framework MAY generate qualified hypotheses where relevant and supported by additional information.
+- The framework MAY generate qualified hypotheses where relevant and supported by additional
+  information.
+- Hypotheses SHALL be explicitly distinguished from verified or logically established knowledge.
 
-Hypotheses SHALL be explicitly distinguished from verified or logically established knowledge.
+#### P66. Lexical Semantic Expansion Shall Be Bounded
 
-### Principle 66: Lexical Semantic Expansion Shall Be Bounded
-
-Knowledge inference SHALL support semantic graph traversal through WordNet.
-
-The system SHALL implement configurable controls for:
+Knowledge inference SHALL support semantic graph traversal through WordNet. The system SHALL
+implement configurable controls for:
 
 - Maximum relationship traversal depth
 - Permitted relationship types
@@ -1623,21 +1427,15 @@ The system SHALL implement configurable controls for:
 - Evidence requirements
 - Inference execution budgets
 
-The inference engine SHALL NOT indiscriminately expand every word into every reachable synset.
+- The inference engine SHALL NOT indiscriminately expand every word into every reachable synset.
+- Semantic expansion SHALL be guided by the current processing objective.
 
-Semantic expansion SHALL be guided by the current processing objective.
+### XXII. Lexical Processing Automata (P67–P68)
 
----
+#### P67. A Lexical Intelligence Automaton Shall Be Introduced
 
-## V. Lexical Processing Automata
-
-### Principle 67: A Lexical Intelligence Automaton Shall Be Introduced
-
-The framework SHALL implement:
-
-`LexicalIntelligenceAutomaton`
-
-This automaton SHALL coordinate dictionary-assisted lexical processing.
+The framework SHALL implement `LexicalIntelligenceAutomaton`. This automaton SHALL coordinate
+dictionary-assisted lexical processing.
 
 Its subordinate automata SHOULD include:
 
@@ -1648,15 +1446,14 @@ Its subordinate automata SHOULD include:
 - `SemanticRelationshipTraversalAutomaton`
 - `LexicalValidationAutomaton`
 
-The lexical automaton SHALL operate as a subordinate component of the information and knowledge processing stages.
+- The lexical automaton SHALL operate as a subordinate component of the information and knowledge
+  processing stages.
+- It SHALL communicate through typed objects and versioned interfaces.
 
-It SHALL communicate through typed objects and versioned interfaces.
+#### P68. Lexical Processing Results Shall Be Persistable
 
-### Principle 68: Lexical Processing Results Shall Be Persistable
-
-The system SHALL support caching or persisting resolved lexical interpretations.
-
-A lexical processing result SHOULD include:
+The system SHALL support caching or persisting resolved lexical interpretations. A lexical
+processing result SHOULD include:
 
 - Original token
 - Normalized token
@@ -1670,35 +1467,28 @@ A lexical processing result SHOULD include:
 - Ambiguity status
 - Source dictionary version
 
-Cached results SHALL be invalidated or re-evaluated when relevant dictionary versions or interpretation rules change.
+Cached results SHALL be invalidated or re-evaluated when relevant dictionary versions or
+interpretation rules change.
 
----
+### XXIII. Dictionary Licensing and Legal Compliance (P69)
 
-## VI. Dictionary Licensing and Legal Compliance
+#### P69. Dictionary Acquisition Shall Respect Intellectual Property Rights
 
-### Principle 69: Dictionary Acquisition Shall Respect Intellectual Property Rights
+- The framework SHALL obtain Open English WordNet through its officially published distribution.
+- The system SHALL retain applicable license notices, attribution, and source information.
+- The application SHALL NOT scrape copyrighted dictionary portals to reproduce proprietary
+  dictionary content without appropriate authorization.
+- Additional lexical datasets SHALL be accepted only after their redistribution, modification,
+  attribution, and commercial-use terms have been reviewed.
+- The dictionary import process SHALL record licensing metadata alongside the imported dataset.
+- The framework SHALL support generating attribution notices for distribution with the
+  application.
 
-The framework SHALL obtain Open English WordNet through its officially published distribution.
+### XXIV. Dictionary Testing and Validation (P70)
 
-The system SHALL retain applicable license notices, attribution, and source information.
+#### P70. Dictionary Integration Shall Be Fully Testable
 
-The application SHALL NOT scrape copyrighted dictionary portals to reproduce proprietary dictionary content without appropriate authorization.
-
-Additional lexical datasets SHALL be accepted only after their redistribution, modification, attribution, and commercial-use terms have been reviewed.
-
-The dictionary import process SHALL record licensing metadata alongside the imported dataset.
-
-The framework SHALL support generating attribution notices for distribution with the application.
-
----
-
-## VII. Dictionary Testing and Validation
-
-### Principle 70: Dictionary Integration Shall Be Fully Testable
-
-The English dictionary subsystem SHALL be validated using automated tests.
-
-Tests SHALL cover:
+The English dictionary subsystem SHALL be validated using automated tests. Tests SHALL cover:
 
 - Dataset download and extraction
 - JSON schema validation
@@ -1714,17 +1504,92 @@ Tests SHALL cover:
 - Duplicate prevention
 - Query performance
 
-The phrase "Seeta plays guitar" SHALL be included in the baseline acceptance corpus.
+- The phrase "Seeta plays guitar" SHALL be included in the baseline acceptance corpus.
+- The framework SHALL successfully identify "plays" as a form of "play" and identify "guitar" as
+  a musical instrument using available lexical and semantic knowledge.
+- The proper noun "Seeta" SHALL be handled through named-entity processing, regardless of whether
+  it exists in the dictionary.
 
-The framework SHALL successfully identify "plays" as a form of "play" and identify "guitar" as a musical instrument using available lexical and semantic knowledge.
+## Reference Cognitive Processing Scenario & Acceptance Baseline
 
-The proper noun "Seeta" SHALL be handled through named-entity processing, regardless of whether it exists in the dictionary.
+This scenario is normative: it defines the expected end-to-end behavior for the baseline
+acceptance sentence (see P70).
 
----
+### Input
 
-## VIII. Amendment to the Development Sequence
+"Seeta plays guitar."
 
-The development order defined under Principle 54 SHALL be amended as follows:
+### Stage A: Data
+
+The system SHALL store the original sentence and associated source metadata.
+
+### Stage B: Information
+
+The information processor SHALL identify:
+
+| Field | Value |
+|-------|-------|
+| Subject | Seeta |
+| Subject category | Person or named entity, subject to resolution |
+| Predicate | plays guitar |
+| Verb lemma | play |
+| Verb tense | simple present |
+| Grammatical person | third person |
+| Grammatical number | singular |
+| Object | guitar |
+| Object category | Musical instrument |
+| Semantic actor | Seeta |
+| Semantic activity | playing a guitar |
+| Polarity | affirmative |
+| Sentence type | declarative |
+
+Person-specific gender SHALL remain unknown unless provided by contextual evidence.
+
+### Stage C: Knowledge
+
+- The knowledge processor SHALL create the explicit proposition `PlaysInstrument(Seeta, Guitar)`.
+- The proposition SHALL initially be attributed to the speaker.
+- The framework MAY derive `Instrument(Guitar)` from established domain knowledge.
+- It MAY derive a qualified hypothesis such as `PossiblyHasSkill(Seeta, GuitarPlaying)`.
+- The knowledge processor SHALL preserve supporting evidence and inference provenance.
+
+### Stage D: Intelligence
+
+The intelligence processor SHALL evaluate possible interpretations and responses. Potential
+candidate actions MAY include:
+
+- Acknowledge the statement
+- Ask whether Seeta plays professionally
+- Ask whether the user also plays an instrument
+- Suggest a musical collaboration if relevant
+- Offer to draft an invitation if context warrants it
+
+- The system SHALL rank or filter candidates according to available context.
+- It SHALL NOT assume that an external action is desirable merely because one is technically
+  possible.
+
+### Stage E: Action
+
+- For an ordinary informational statement with no additional request, the system MAY produce a
+  conversational response such as: "Does Seeta play guitar professionally, or is it a hobby?"
+- If the user explicitly requests a message invitation, the action processor MAY generate a draft
+  and, with the necessary authorization, send the message through an installed messaging
+  integration.
+
+### Stage F: Feedback
+
+The system SHALL record permitted conversational feedback and update contextual understanding.
+
+## Development Workflow & Implementation Sequence
+
+### Specification-Driven Workflow
+
+Development SHALL follow the GitHub Spec Kit workflow (P53): specification → clarification (as
+needed) → implementation plan → task breakdown → implementation → automated validation.
+
+### Mandatory Development Sequence
+
+Per P54 (as amended in v1.1.0), the development order SHALL be:
 
 1. Core finite-state automata framework
 2. Hierarchical automata composition
@@ -1745,22 +1610,87 @@ The development order defined under Principle 54 SHALL be amended as follows:
 17. Advanced inference and probabilistic reasoning
 18. Additional language packs
 
+<!-- Superseded v1.0.0 sequence, retained for traceability (P54 original):
+     1 Finite-state automata framework; 2 Hierarchical automata composition; 3 Data and
+     information models; 4 English-language parsing; 5 Canonical semantic representations;
+     6 Structured knowledge storage; 7 Deterministic knowledge inference; 8 Basic intelligence
+     synthesis; 9 Conversational responses; 10 Controlled action execution. -->
+
+### First Functional Milestone
+
 The first functional milestone SHALL demonstrate:
 
-**English Sentence → Dictionary Lookup → Grammar Analysis → Information Object → Knowledge Inference → Intelligence Object → Conversational Response**
+**English Sentence → Dictionary Lookup → Grammar Analysis → Information Object → Knowledge
+Inference → Intelligence Object → Conversational Response**
 
 All stages SHALL provide inspectable intermediate results.
 
----
+### Constitution Check Gates
 
-## IX. Constitutional Compatibility
+Every implementation plan's Constitution Check SHALL verify, at minimum:
 
-This amendment supplements the original HCIF Constitution v1.0.0.
+- **Spec completeness (P53, P49):** written specification, functional requirements, explicit
+  assumptions, acceptance scenarios, and measurable acceptance criteria against identified
+  evaluation datasets.
+- **Sequence (P54):** the feature does not depend on an unvalidated earlier step of the Mandatory
+  Development Sequence.
+- **Automata discipline (P2, P3, P25, P45):** execution is governed by finite automata exposing
+  the standard contract; cognitive state is separate from typed cognitive objects; automata
+  tests cover the P45 checklist.
+- **Architectural boundaries (P42, P55):** no parsing-to-action coupling; no bypass of knowledge
+  validation or action authorization; no application-specific behavior in core automata.
+- **Epistemic integrity (P12, P13, P33, P65):** provenance and epistemic status preserved;
+  hypotheses never presented or stored as verified facts.
+- **Security (P20, P28, P50–P52):** authorization, untrusted-input handling, rule isolation, and
+  audit requirements satisfied; real external actions only under explicit integration-test
+  authorization (P48).
+- **Bounded reasoning (P40, P66):** processing budgets, depth limits, and cycle detection
+  configured.
+- **English-first scope (P56):** no English-specific assumptions in core automata.
 
-Principles 1–55 remain effective unless explicitly modified.
+## Governance
 
-Principles 56–70 SHALL be mandatory for the initial English-language implementation.
+This constitution supersedes conflicting practices, conventions, and documents within HCIF.
 
-The resulting constitutional version SHALL be **1.1.0**.
+### Amendment Procedure
 
-The framework SHALL remain architecturally capable of supporting other languages in future releases without requiring redesign of the cognitive lifecycle.
+Changes to this constitution SHALL require:
+
+1. A documented amendment proposal
+2. Identification of affected principles
+3. Architectural impact analysis
+4. Compatibility assessment
+5. Updated validation requirements
+6. Version increment
+7. Amendment approval
+
+### Versioning Policy
+
+The constitution SHALL use semantic versioning:
+
+- **MAJOR:** Removal or incompatible modification of foundational principles
+- **MINOR:** Addition of new principles or substantial extensions
+- **PATCH:** Clarifications that do not materially change architectural obligations
+
+### Compliance
+
+- Feature specifications, implementation plans, and task definitions SHALL reference applicable
+  constitutional principles (by number, P1–P70).
+- Any deviation SHALL be explicitly justified and documented (in the plan's Complexity Tracking
+  section).
+
+### Foundational Priority
+
+When implementation convenience conflicts with these principles, correctness, explainability,
+security, and extensibility SHALL take precedence.
+
+### Constitutional Compatibility
+
+- The English-language / Open English WordNet amendment (v1.1.0) supplements the original HCIF
+  Constitution v1.0.0.
+- Principles P1–P55 remain effective unless explicitly modified.
+- Principles P56–P70 SHALL be mandatory for the initial English-language implementation.
+- The framework SHALL remain architecturally capable of supporting other languages in future
+  releases without requiring redesign of the cognitive lifecycle.
+
+**Version**: 1.1.1 | **Ratified**: 2026-10-15 | **Last Amended**: 2026-10-15
